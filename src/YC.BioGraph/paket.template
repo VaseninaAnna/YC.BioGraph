@@ -1,0 +1,25 @@
+type project
+title
+    YC.BioGraph
+owners
+    YaccConstructor
+authors 
+    YaccConstructor
+projectUrl
+    https://github.com/YaccConstructor/YC.BioGraph
+iconUrl
+    https://raw.githubusercontent.com/YaccConstructor/YC.BioGraph/master/docs/files/img/logo.png
+licenseUrl
+    https://github.com/YaccConstructor/YC.BioGraph/blob/master/LICENSE.txt
+requireLicenseAcceptance
+    false
+copyright
+    Copyright 2015
+tags
+    RNA search graph parsing web
+summary
+    Bio graph parsing web demo
+description
+    Demo web application for bio graph parsing (RNA search)
+
+
