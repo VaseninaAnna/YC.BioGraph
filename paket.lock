@@ -2,6 +2,8 @@ NUGET
   remote: https://www.nuget.org/api/v2
     FSharp.Core (4.0.0.1) - redirects: force
     WebSharper (3.6.18.241)
+    WebSharper.UI.Next (3.6.15.211)
+      WebSharper (>= 3.6.12.235)
 
 GROUP Build
 NUGET
