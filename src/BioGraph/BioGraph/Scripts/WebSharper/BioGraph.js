@@ -1,42 +1,26 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Control,FSharpEvent,List,Html,Client,Attr,Tags,IntelliFactory,Formlets,Base,Result,EventsPervasives,Formlets1,Formlet,jQuery,Controls,Enhance,BioGraph,Client1,Data,FormButtonConfiguration;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Tags,Attr,jQuery,Controls,Enhance,BioGraph,Client1,Data,FormButtonConfiguration;
  Runtime.Define(Global,{
   BioGraph:{
    Client:{
+    ButtonControl:Runtime.Field(function()
+    {
+     return Formlet.OfElement(function()
+     {
+      var arg10;
+      arg10=List.ofArray([Tags.Tags().text("Choose default")]);
+      return Tags.Tags().NewTag("button",arg10);
+     });
+    }),
     FileControl:Runtime.Field(function()
     {
-     var f,formlet;
-     f=function()
+     return Formlet.OfElement(function()
      {
-      var stateChanged,x,x1,arg00,input,reset;
-      stateChanged=FSharpEvent.New();
-      x=List.ofArray([Attr.Attr().NewAttr("type","file")]);
-      x1=Tags.Tags().NewTag("input",x);
-      arg00=function(el)
-      {
-       return function()
-       {
-        return stateChanged.event.Trigger(Runtime.New(Result,{
-         $:0,
-         $0:el.get_Value()
-        }));
-       };
-      };
-      EventsPervasives.Events().OnChange(arg00,x1);
-      input=x1;
-      reset=function()
-      {
-       input.set_Value("");
-       return stateChanged.event.Trigger(Runtime.New(Result,{
-        $:0,
-        $0:""
-       }));
-      };
-      return[input,reset,stateChanged.event];
-     };
-     formlet=Formlet.BuildFormlet(f);
-     return Formlet.InitWith("",formlet);
+      var arg10;
+      arg10=List.ofArray([Attr.Attr().NewAttr("type","file")]);
+      return Tags.Tags().NewTag("input",arg10);
+     });
     }),
     InputControl:function(lbl)
     {
@@ -57,7 +41,10 @@
       {
        return _builder_.Bind(Client1.FileControl(),function(_arg2)
        {
-        return _builder_.Return([_arg1,_arg2]);
+        return _builder_.Bind(Client1.ButtonControl(),function(_arg3)
+        {
+         return _builder_.Return([_arg1,_arg2,_arg3]);
+        });
        });
       });
      });
@@ -82,7 +69,7 @@
       var f,formlet1,formlet2,formlet3;
       f=function(e)
       {
-       jQuery(e.Dom.querySelector("textarea")).css("height","280px").css("width","500px");
+       jQuery(e.Dom.querySelector("textarea")).css("height","300px").css("width","500px");
        return e;
       };
       formlet1=Controls.ReadOnlyTextArea("");
@@ -187,26 +174,19 @@
  });
  Runtime.OnInit(function()
  {
-  Control=Runtime.Safe(Global.WebSharper.Control);
-  FSharpEvent=Runtime.Safe(Control.FSharpEvent);
+  Formlets=Runtime.Safe(Global.WebSharper.Formlets);
+  Formlet=Runtime.Safe(Formlets.Formlet);
   List=Runtime.Safe(Global.WebSharper.List);
   Html=Runtime.Safe(Global.WebSharper.Html);
   Client=Runtime.Safe(Html.Client);
-  Attr=Runtime.Safe(Client.Attr);
   Tags=Runtime.Safe(Client.Tags);
-  IntelliFactory=Runtime.Safe(Global.IntelliFactory);
-  Formlets=Runtime.Safe(IntelliFactory.Formlets);
-  Base=Runtime.Safe(Formlets.Base);
-  Result=Runtime.Safe(Base.Result);
-  EventsPervasives=Runtime.Safe(Client.EventsPervasives);
-  Formlets1=Runtime.Safe(Global.WebSharper.Formlets);
-  Formlet=Runtime.Safe(Formlets1.Formlet);
+  Attr=Runtime.Safe(Client.Attr);
   jQuery=Runtime.Safe(Global.jQuery);
-  Controls=Runtime.Safe(Formlets1.Controls);
-  Enhance=Runtime.Safe(Formlets1.Enhance);
+  Controls=Runtime.Safe(Formlets.Controls);
+  Enhance=Runtime.Safe(Formlets.Enhance);
   BioGraph=Runtime.Safe(Global.BioGraph);
   Client1=Runtime.Safe(BioGraph.Client);
-  Data=Runtime.Safe(Formlets1.Data);
+  Data=Runtime.Safe(Formlets.Data);
   return FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
  });
  Runtime.OnLoad(function()
@@ -214,6 +194,7 @@
   Client1.frm();
   Client1.RangeControl();
   Client1.FileControl();
+  Client1.ButtonControl();
   return;
  });
 }());

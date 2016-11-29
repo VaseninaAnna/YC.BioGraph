@@ -16,7 +16,17 @@ module wsfl = WebSharper.Formlets.Layout
 [<JavaScript>]
 module Client =
 
-    let FileControl  =
+    let ButtonControl =
+       wsff.OfElement (fun () ->
+            Button[Text "Choose default"]
+        )
+   
+    let FileControl = 
+        wsff.OfElement (fun () ->
+            Input [Attr.Type "file"]
+        )
+    
+    (*let FileControl  =
         wsff.BuildFormlet <| fun () ->
             let stateChanged = new Event<IntelliFactory.Formlets.Base.Result<string>>()
             let input =
@@ -26,7 +36,7 @@ module Client =
                 input.Value <- ""
                 stateChanged.Trigger(IntelliFactory.Formlets.Base.Result.Success "")
             input, reset, stateChanged.Publish
-        |> wsff.InitWith ""//the most important part of the code, don't ever delete it!
+        |> wsff.InitWith ""//the most important part of the code, don't ever delete it!*)
     
     let InputControl lbl =
         wsff.Do {
@@ -41,7 +51,8 @@ module Client =
                         .Ignore
                     e)
             let! fileInput = FileControl
-            return (textInput, fileInput)             
+            let! chooseButton = ButtonControl
+            return (textInput, fileInput, chooseButton)             
         }
         |> wsff.Vertical
         |> wsfe.WithFormContainer
@@ -57,7 +68,7 @@ module Client =
         |> wsfe.WithLabelAbove 
         |> wsfe.WithFormContainer 
 
-    let OutputControl lbl flag = //flag - текст или картинка
+    let OutputControl lbl flag = //flag = text/image
         wsff.Do {
             let! output =
                 wsfc.ReadOnlyTextArea""                    
@@ -65,7 +76,7 @@ module Client =
                 |> wsfe.WithLabelAbove 
                 |> wsff.MapElement (fun e ->
                     JQuery.JQuery.Of(e.Dom.QuerySelector("textarea"))
-                            .Css("height", "280px")
+                            .Css("height", "300px")
                             .Css("width", "500px")
                             .Ignore
                     e)
