@@ -1,17 +1,17 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Tags,Attr,jQuery,Controls,Enhance,YC,BioGraph,Client1,Data,FormButtonConfiguration;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Attr,Tags,jQuery,Controls,Enhance,YC,BioGraph,Client1,Data,FormButtonConfiguration;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
     Client:{
-     ButtonControl:Runtime.Field(function()
+     ChooseDefaultControl:Runtime.Field(function()
      {
       return Formlet.OfElement(function()
       {
        var arg10;
-       arg10=List.ofArray([Tags.Tags().text("Choose default")]);
-       return Tags.Tags().NewTag("button",arg10);
+       arg10=List.ofArray([Attr.Attr().NewAttr("type","button"),Attr.Attr().NewAttr("value","Choose default"),Attr.Attr().NewAttr("style","color: #000000")]);
+       return Tags.Tags().NewTag("input",arg10);
       });
      }),
      FileControl:Runtime.Field(function()
@@ -42,7 +42,7 @@
        {
         return _builder_.Bind(Client1.FileControl(),function(_arg2)
         {
-         return _builder_.Bind(Client1.ButtonControl(),function(_arg3)
+         return _builder_.Bind(Client1.ChooseDefaultControl(),function(_arg3)
          {
           return _builder_.Return([_arg1,_arg2,_arg3]);
          });
@@ -61,7 +61,7 @@
       })]);
       return Tags.Tags().NewTag("div",arg10);
      },
-     OutputControl:function(lbl)
+     OutputControl:Runtime.Field(function()
      {
       var _builder_,formlet;
       _builder_=Formlet.Do();
@@ -74,7 +74,7 @@
         return e;
        };
        formlet1=Controls.ReadOnlyTextArea("");
-       formlet2=Enhance.WithTextLabel(lbl,formlet1);
+       formlet2=Enhance.WithTextLabel("Output",formlet1);
        formlet3=Enhance.WithLabelAbove(formlet2);
        return _builder_.Bind(Formlet.MapElement(f,formlet3),function(_arg1)
        {
@@ -82,7 +82,7 @@
        });
       });
       return Enhance.WithFormContainer(formlet);
-     },
+     }),
      RangeControl:Runtime.Field(function()
      {
       var _builder_,formlet,formlet3,formlet4,formlet5;
@@ -107,6 +107,19 @@
       formlet4=Enhance.WithTextLabel("String range",formlet3);
       formlet5=Enhance.WithLabelAbove(formlet4);
       return Enhance.WithFormContainer(formlet5);
+     }),
+     ShowImageControl:Runtime.Field(function()
+     {
+      var formlet,formlet1,formlet2;
+      formlet=Formlet.OfElement(function()
+      {
+       var arg10;
+       arg10=List.ofArray([Attr.Attr().NewAttr("style","height: 300px; width: 500px")]);
+       return Tags.Tags().NewTag("img",arg10);
+      });
+      formlet1=Enhance.WithTextLabel("Graph visualisation",formlet);
+      formlet2=Enhance.WithLabelAbove(formlet1);
+      return Enhance.WithFormContainer(formlet2);
      }),
      frm:Runtime.Field(function()
      {
@@ -135,9 +148,11 @@
       _builder_1=Formlet.Do();
       formlet3=_builder_1.Delay(function()
       {
-       return _builder_1.Bind(Client1.OutputControl("Graph visualisation","image"),function(_arg5)
+       var formlet1;
+       formlet1=Client1.ShowImageControl();
+       return _builder_1.Bind(Enhance.WithFormContainer(formlet1),function(_arg5)
        {
-        return _builder_1.Bind(Client1.OutputControl("Output","text"),function(_arg6)
+        return _builder_1.Bind(Client1.OutputControl(),function(_arg6)
         {
          return _builder_1.Return([_arg5,_arg6]);
         });
@@ -181,8 +196,8 @@
   List=Runtime.Safe(Global.WebSharper.List);
   Html=Runtime.Safe(Global.WebSharper.Html);
   Client=Runtime.Safe(Html.Client);
-  Tags=Runtime.Safe(Client.Tags);
   Attr=Runtime.Safe(Client.Attr);
+  Tags=Runtime.Safe(Client.Tags);
   jQuery=Runtime.Safe(Global.jQuery);
   Controls=Runtime.Safe(Formlets.Controls);
   Enhance=Runtime.Safe(Formlets.Enhance);
@@ -195,9 +210,11 @@
  Runtime.OnLoad(function()
  {
   Client1.frm();
+  Client1.ShowImageControl();
   Client1.RangeControl();
+  Client1.OutputControl();
   Client1.FileControl();
-  Client1.ButtonControl();
+  Client1.ChooseDefaultControl();
   return;
  });
 }());
