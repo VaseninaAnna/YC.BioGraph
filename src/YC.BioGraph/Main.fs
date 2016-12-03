@@ -2,51 +2,58 @@ namespace YC.BioGraph
 
 open WebSharper
 open WebSharper.Sitelets
-open WebSharper.UI.Next
-open WebSharper.UI.Next.Server
 
 type EndPoint =
     | [<EndPoint "/">] Home
     | [<EndPoint "/about">] About
 
 module Templating =
-    open WebSharper.UI.Next.Html
+    open WebSharper.Html.Server
 
-    type MainTemplate = Templating.Template<"Main.html">
+    type Page =
+        {
+            Title : string
+            MenuBar : list<Element>
+            Body : list<Element>
+        }
+
+    let MainTemplate =
+        Content.Template<Page>("~/Main.html")
+            .With("title", fun x -> x.Title)
+            .With("menubar", fun x -> x.MenuBar)
+            .With("body", fun x -> x.Body)
 
     // Compute a menubar where the menu item for the given endpoint is active
-    let MenuBar (ctx: Context<EndPoint>) endpoint : Doc list =
+    let MenuBar (ctx: Context<EndPoint>) endpoint =
         let ( => ) txt act =
-             liAttr [if endpoint = act then yield attr.``class`` "active"] [
-                aAttr [attr.href (ctx.Link act)] [text txt]
+             LI [if endpoint = act then yield Attr.Class "active"] -< [
+                A [Attr.HRef (ctx.Link act)] -< [Text txt]
              ]
         [
-            li ["Home" => EndPoint.Home]
-            li ["About" => EndPoint.About]
+            LI ["Home" => EndPoint.Home]
+            LI ["About" => EndPoint.About]
         ]
 
-    let Main ctx action title body =
-        Content.Page(
-            MainTemplate.Doc(
-                title = title,
-                menubar = MenuBar ctx action,
-                body = body
-            )
-        )
+    let Main ctx endpoint title body : Async<Content<EndPoint>> =
+        Content.WithTemplate MainTemplate
+            {
+                Title = title
+                MenuBar = MenuBar ctx endpoint
+                Body = body
+            }
 
 module Site =
-    open WebSharper.UI.Next.Html
+    open WebSharper.Html.Server
 
     let HomePage ctx =
         Templating.Main ctx EndPoint.Home "Home" [
-            h1 [text "Say Hi to the server!"]
-            div [client <@ Client.Main() @>]
+            Div [ClientSide <@ Client.Main() @>]
         ]
 
     let AboutPage ctx =
         Templating.Main ctx EndPoint.About "About" [
-            h1 [text "About"]
-            p [text "This is a template WebSharper client-server application."]
+            H1 [Text "About"]
+            P [Text "This is the best application you've ever seen."]
         ]
 
     [<Website>]
