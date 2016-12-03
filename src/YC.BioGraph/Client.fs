@@ -16,9 +16,9 @@ module wsfl = WebSharper.Formlets.Layout
 [<JavaScript>]
 module Client =
 
-    let ButtonControl =
+    let ChooseDefaultControl = //opens the list of default grammars/graphs
        wsff.OfElement (fun () ->
-            Button[Text "Choose default"]
+            Input [Attr.Type "button"; Attr.Value "Choose default"; Attr.Style "color: #000000"]
         )
    
     let FileControl = 
@@ -34,12 +34,12 @@ module Client =
                 |> wsfe.WithLabelAbove
                 |> wsff.MapElement (fun e ->
                     JQuery.JQuery.Of(e.Dom.QuerySelector("textarea"))
-                        .Css("height", "200px")
+                        .Css("height", "200px") 
                         .Css("width", "500px")
                         .Ignore
                     e)
             let! fileInput = FileControl
-            let! chooseButton = ButtonControl
+            let! chooseButton = ChooseDefaultControl
             return (textInput, fileInput, chooseButton)             
         }
         |> wsff.Vertical
@@ -56,11 +56,11 @@ module Client =
         |> wsfe.WithLabelAbove 
         |> wsfe.WithFormContainer 
 
-    let OutputControl lbl flag = //flag - text/image
+    let OutputControl = 
         wsff.Do {
             let! output =
                 wsfc.ReadOnlyTextArea""                    
-                |> wsfe.WithTextLabel lbl
+                |> wsfe.WithTextLabel "Output"
                 |> wsfe.WithLabelAbove 
                 |> wsff.MapElement (fun e ->
                     JQuery.JQuery.Of(e.Dom.QuerySelector("textarea"))
@@ -72,6 +72,15 @@ module Client =
         }
         |> wsfe.WithFormContainer
     
+    let ShowImageControl =
+       wsff.OfElement (fun () ->
+            Img[Attr.Style "height: 300px; width: 500px"]
+        )
+       |> wsfe.WithTextLabel "Graph visualisation"
+       |> wsfe.WithLabelAbove 
+       |> wsfe.WithFormContainer
+        
+
     let frm =        
      
         let InputForm  =
@@ -86,8 +95,8 @@ module Client =
 
         let OutputForm =
             wsff.Do {
-                let! picture = OutputControl "Graph visualisation" "image"
-                let! output = OutputControl "Output" "text"
+                let! picture = ShowImageControl |> wsfe.WithFormContainer
+                let! output = OutputControl 
                 return (picture, output)
             }
             |> wsff.Vertical 
