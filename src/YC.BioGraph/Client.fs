@@ -16,6 +16,14 @@ module wsfl = WebSharper.Formlets.Layout
 [<JavaScript>]
 module Client =
 
+    let setFormSize (height: string) (width: string) (formletType: string) (formlet: Formlets.Data.Formlet<'c>) =
+        formlet |> wsff.MapElement (fun e ->
+            JQuery.JQuery.Of(e.Dom.QuerySelector(formletType))
+                .Css("height", height) 
+                .Css("width", width)
+                .Ignore
+            e)
+
     let ChooseDefaultControl = //opens the list of default grammars/graphs
        wsff.OfElement (fun () ->
             Input [Attr.Type "button"; Attr.Value "Choose default"; Attr.Style "color: #000000"]
@@ -23,7 +31,7 @@ module Client =
    
     let FileControl = 
         wsff.OfElement (fun () ->
-            Input [Attr.Type "file"]
+            Input [Attr.Type "file"; Attr.Lang "en"] //set english lang
         )
     
     let InputControl lbl =
@@ -32,12 +40,7 @@ module Client =
                 wsfc.TextArea ""                    
                 |> wsfe.WithTextLabel lbl
                 |> wsfe.WithLabelAbove
-                |> wsff.MapElement (fun e ->
-                    JQuery.JQuery.Of(e.Dom.QuerySelector("textarea"))
-                        .Css("height", "200px") 
-                        .Css("width", "500px")
-                        .Ignore
-                    e)
+                |> setFormSize "100px" "500px" "textarea"
             let! fileInput = FileControl
             let! chooseButton = ChooseDefaultControl
             return (textInput, fileInput, chooseButton)             
@@ -47,8 +50,16 @@ module Client =
 
     let RangeControl =
         wsff.Do {                
-            let! min = wsfc.Input "1" |> wsfe.WithTextLabel "from" |> wsfd.Validator.IsInt "Enter numericr value" 
-            let! max  = wsfc.Input "5" |> wsfe.WithTextLabel "to" |> wsfd.Validator.IsInt "Enter numericr value" 
+            let! min = 
+                wsfc.Input "1" 
+                |> wsfe.WithTextLabel "from" 
+                |> wsfd.Validator.IsInt "Enter numericr value"
+                |> setFormSize "30px" "210px" "input"
+            let! max  = 
+                wsfc.Input "5" 
+                |> wsfe.WithTextLabel "to" 
+                |> wsfd.Validator.IsInt "Enter numericr value" 
+                |> setFormSize "30px" "210px" "input"      
             return (int min, int max)
         }
         |> wsff.Horizontal 
@@ -59,27 +70,22 @@ module Client =
     let OutputControl = 
         wsff.Do {
             let! output =
-                wsfc.ReadOnlyTextArea""                    
+                wsfc.ReadOnlyTextArea""   
                 |> wsfe.WithTextLabel "Output"
-                |> wsfe.WithLabelAbove 
-                |> wsff.MapElement (fun e ->
-                    JQuery.JQuery.Of(e.Dom.QuerySelector("textarea"))
-                            .Css("height", "300px")
-                            .Css("width", "500px")
-                            .Ignore
-                    e)
-            return output
+                |> wsfe.WithLabelAbove                  
+                |> setFormSize "200px" "600px" "textarea"
+            let! wrapCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "wrap" |> wsfe.WithLabelLeft
+            return (wrapCheckbox, output)
         }
         |> wsfe.WithFormContainer
     
-    let ShowImageControl =
+    let ShowImageControl = //add border
        wsff.OfElement (fun () ->
-            Img[Attr.Style "height: 300px; width: 500px"]
+            Img[Attr.Style "height: 200px; width: 300px"; Attr.Src "graph(kindof).jpg"; Attr.Border "4px"]
         )
        |> wsfe.WithTextLabel "Graph visualisation"
        |> wsfe.WithLabelAbove 
-       |> wsfe.WithFormContainer
-        
+       |> wsfe.WithFormContainer     
 
     let frm =        
      
@@ -88,14 +94,14 @@ module Client =
                 let! grammar = InputControl "Grammar"
                 let! graph = InputControl "Graph"
                 let! range = RangeControl
-                let! checkbox = wsfc.Checkbox false |> wsfe.WithTextLabel "DRAW GRAPH" |> wsfe.WithLabelLeft
+                let! checkbox = wsfc.Checkbox false |> wsfe.WithTextLabel "DRAW GRAPH" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
                 return (grammar, graph, range, checkbox)
             }
             |> wsff.Vertical
 
         let OutputForm =
             wsff.Do {
-                let! picture = ShowImageControl |> wsfe.WithFormContainer
+                let! picture = ShowImageControl
                 let! output = OutputControl 
                 return (picture, output)
             }
@@ -109,7 +115,7 @@ module Client =
         |> wsff.Horizontal
         |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
                                                                                    Label = Some "GO" 
-                                                                                   Style=Some "background-color: #FF1493; font-size: 40px"})
+                                                                                   Style=Some "background-color: #FF1493; font-size: 30px; height: 40px; width: 80px; border-width: 3px; border-color: #000000"})
 
     let Main () =
         let MainForm =

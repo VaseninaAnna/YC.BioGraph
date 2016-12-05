@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Attr,Tags,jQuery,Controls,Enhance,YC,BioGraph,Client1,Data,FormButtonConfiguration;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Attr,Tags,Controls,Enhance,YC,BioGraph,Client1,Data,FormButtonConfiguration,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
@@ -19,7 +19,7 @@
       return Formlet.OfElement(function()
       {
        var arg10;
-       arg10=List.ofArray([Attr.Attr().NewAttr("type","file")]);
+       arg10=List.ofArray([Attr.Attr().NewAttr("type","file"),Attr.Attr().NewAttr("lang","en")]);
        return Tags.Tags().NewTag("input",arg10);
       });
      }),
@@ -29,16 +29,11 @@
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var f,formlet1,formlet2,formlet3;
-       f=function(e)
-       {
-        jQuery(e.Dom.querySelector("textarea")).css("height","200px").css("width","500px");
-        return e;
-       };
+       var formlet1,formlet2,formlet3;
        formlet1=Controls.TextArea("");
        formlet2=Enhance.WithTextLabel(lbl,formlet1);
        formlet3=Enhance.WithLabelAbove(formlet2);
-       return _builder_.Bind(Formlet.MapElement(f,formlet3),function(_arg1)
+       return _builder_.Bind(Client1.setFormSize("100px","500px","textarea",formlet3),function(_arg1)
        {
         return _builder_.Bind(Client1.FileControl(),function(_arg2)
         {
@@ -67,46 +62,49 @@
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var f,formlet1,formlet2,formlet3;
-       f=function(e)
-       {
-        jQuery(e.Dom.querySelector("textarea")).css("height","300px").css("width","500px");
-        return e;
-       };
+       var formlet1,formlet2,formlet3;
        formlet1=Controls.ReadOnlyTextArea("");
        formlet2=Enhance.WithTextLabel("Output",formlet1);
        formlet3=Enhance.WithLabelAbove(formlet2);
-       return _builder_.Bind(Formlet.MapElement(f,formlet3),function(_arg1)
+       return _builder_.Bind(Client1.setFormSize("200px","600px","textarea",formlet3),function(_arg1)
        {
-        return _builder_.Return(_arg1);
+        var formlet4,formlet5;
+        formlet4=Controls.Checkbox(false);
+        formlet5=Enhance.WithTextLabel("wrap",formlet4);
+        return _builder_.Bind(Enhance.WithLabelLeft(formlet5),function(_arg2)
+        {
+         return _builder_.Return([_arg2,_arg1]);
+        });
        });
       });
       return Enhance.WithFormContainer(formlet);
      }),
      RangeControl:Runtime.Field(function()
      {
-      var _builder_,formlet,formlet3,formlet4,formlet5;
+      var _builder_,formlet,formlet5,formlet6,formlet7;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var formlet1,x;
+       var formlet1,x,formlet2;
        formlet1=Controls.Input("1");
        x=Enhance.WithTextLabel("from",formlet1);
-       return _builder_.Bind((Data.Validator().IsInt("Enter numericr value"))(x),function(_arg1)
+       formlet2=(Data.Validator().IsInt("Enter numericr value"))(x);
+       return _builder_.Bind(Client1.setFormSize("30px","210px","input",formlet2),function(_arg1)
        {
-        var formlet2,x1;
-        formlet2=Controls.Input("5");
-        x1=Enhance.WithTextLabel("to",formlet2);
-        return _builder_.Bind((Data.Validator().IsInt("Enter numericr value"))(x1),function(_arg2)
+        var formlet3,x1,formlet4;
+        formlet3=Controls.Input("5");
+        x1=Enhance.WithTextLabel("to",formlet3);
+        formlet4=(Data.Validator().IsInt("Enter numericr value"))(x1);
+        return _builder_.Bind(Client1.setFormSize("30px","210px","input",formlet4),function(_arg2)
         {
          return _builder_.Return([_arg1<<0,_arg2<<0]);
         });
        });
       });
-      formlet3=Formlet.Horizontal(formlet);
-      formlet4=Enhance.WithTextLabel("String range",formlet3);
-      formlet5=Enhance.WithLabelAbove(formlet4);
-      return Enhance.WithFormContainer(formlet5);
+      formlet5=Formlet.Horizontal(formlet);
+      formlet6=Enhance.WithTextLabel("String range",formlet5);
+      formlet7=Enhance.WithLabelAbove(formlet6);
+      return Enhance.WithFormContainer(formlet7);
      }),
      ShowImageControl:Runtime.Field(function()
      {
@@ -114,7 +112,7 @@
       formlet=Formlet.OfElement(function()
       {
        var arg10;
-       arg10=List.ofArray([Attr.Attr().NewAttr("style","height: 300px; width: 500px")]);
+       arg10=List.ofArray([Attr.Attr().NewAttr("style","height: 200px; width: 300px"),Attr.Attr().NewAttr("src","graph(kindof).jpg"),Attr.Attr().NewAttr("border","4px")]);
        return Tags.Tags().NewTag("img",arg10);
       });
       formlet1=Enhance.WithTextLabel("Graph visualisation",formlet);
@@ -123,7 +121,7 @@
      }),
      frm:Runtime.Field(function()
      {
-      var _builder_,formlet,InputForm,_builder_1,formlet3,OutputForm,_builder_2,formlet4,x,inputRecord,buttonConf;
+      var _builder_,formlet,InputForm,_builder_1,formlet4,OutputForm,_builder_2,formlet5,x,inputRecord,buttonConf;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
@@ -133,10 +131,11 @@
         {
          return _builder_.Bind(Client1.RangeControl(),function(_arg3)
          {
-          var formlet1,formlet2;
+          var formlet1,formlet2,formlet3;
           formlet1=Controls.Checkbox(false);
           formlet2=Enhance.WithTextLabel("DRAW GRAPH",formlet1);
-          return _builder_.Bind(Enhance.WithLabelLeft(formlet2),function(_arg4)
+          formlet3=Enhance.WithLabelLeft(formlet2);
+          return _builder_.Bind(Enhance.WithFormContainer(formlet3),function(_arg4)
           {
            return _builder_.Return([_arg1,_arg2,_arg3,_arg4]);
           });
@@ -146,11 +145,9 @@
       });
       InputForm=Formlet.Vertical(formlet);
       _builder_1=Formlet.Do();
-      formlet3=_builder_1.Delay(function()
+      formlet4=_builder_1.Delay(function()
       {
-       var formlet1;
-       formlet1=Client1.ShowImageControl();
-       return _builder_1.Bind(Enhance.WithFormContainer(formlet1),function(_arg5)
+       return _builder_1.Bind(Client1.ShowImageControl(),function(_arg5)
        {
         return _builder_1.Bind(Client1.OutputControl(),function(_arg6)
         {
@@ -158,9 +155,9 @@
         });
        });
       });
-      OutputForm=Formlet.Vertical(formlet3);
+      OutputForm=Formlet.Vertical(formlet4);
       _builder_2=Formlet.Do();
-      formlet4=_builder_2.Delay(function()
+      formlet5=_builder_2.Delay(function()
       {
        return _builder_2.Bind(InputForm,function(_arg7)
        {
@@ -170,7 +167,7 @@
         });
        });
       });
-      x=Formlet.Horizontal(formlet4);
+      x=Formlet.Horizontal(formlet5);
       inputRecord=FormButtonConfiguration.get_Default();
       buttonConf=Runtime.New(FormButtonConfiguration,{
        Label:{
@@ -179,12 +176,22 @@
        },
        Style:{
         $:1,
-        $0:"background-color: #FF1493; font-size: 40px"
+        $0:"background-color: #FF1493; font-size: 30px; height: 40px; width: 80px; border-width: 3px; border-color: #000000"
        },
        Class:inputRecord.Class
       });
       return Enhance.WithCustomSubmitButton(buttonConf,x);
-     })
+     }),
+     setFormSize:function(height,width,formletType,formlet)
+     {
+      var f;
+      f=function(e)
+      {
+       jQuery(e.Dom.querySelector(formletType)).css("height",height).css("width",width);
+       return e;
+      };
+      return Formlet.MapElement(f,formlet);
+     }
     }
    }
   }
@@ -198,14 +205,14 @@
   Client=Runtime.Safe(Html.Client);
   Attr=Runtime.Safe(Client.Attr);
   Tags=Runtime.Safe(Client.Tags);
-  jQuery=Runtime.Safe(Global.jQuery);
   Controls=Runtime.Safe(Formlets.Controls);
   Enhance=Runtime.Safe(Formlets.Enhance);
   YC=Runtime.Safe(Global.YC);
   BioGraph=Runtime.Safe(YC.BioGraph);
   Client1=Runtime.Safe(BioGraph.Client);
   Data=Runtime.Safe(Formlets.Data);
-  return FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
+  FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
+  return jQuery=Runtime.Safe(Global.jQuery);
  });
  Runtime.OnLoad(function()
  {

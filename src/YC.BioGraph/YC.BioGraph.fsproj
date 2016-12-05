@@ -208,6 +208,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Main.html" />
+    <Content Include="graph%28kindof%29.jpg" />
     <None Include="paket.references" />
     <None Include="paket.template" />
     <Content Include="App.config" />
