@@ -1,18 +1,38 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Attr,Tags,Controls,Enhance,YC,BioGraph,Client1,Data,FormButtonConfiguration,jQuery;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Attr,Tags,T,Enhance,Controls,YC,BioGraph,Client1,Data,FormButtonConfiguration,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
     Client:{
      ChooseDefaultControl:Runtime.Field(function()
      {
-      return Formlet.OfElement(function()
+      var _builder_,formlet,formlet1;
+      _builder_=Formlet.Do();
+      formlet=_builder_.Delay(function()
       {
-       var arg10;
-       arg10=List.ofArray([Attr.Attr().NewAttr("type","button"),Attr.Attr().NewAttr("value","Choose default"),Attr.Attr().NewAttr("style","color: #000000")]);
-       return Tags.Tags().NewTag("input",arg10);
+       return _builder_.Bind(Formlet.OfElement(function()
+       {
+        var arg10;
+        arg10=List.ofArray([Attr.Attr().NewAttr("type","button"),Attr.Attr().NewAttr("value","Choose default"),Attr.Attr().NewAttr("style","color: #000000")]);
+        return Tags.Tags().NewTag("input",arg10);
+       }),function(_arg1)
+       {
+        return _builder_.Bind(Formlet.OfElement(function()
+        {
+         var arg10;
+         arg10=Runtime.New(T,{
+          $:0
+         });
+         return Tags.Tags().NewTag("select",arg10);
+        }),function(_arg2)
+        {
+         return _builder_.Return([_arg1,_arg2]);
+        });
+       });
       });
+      formlet1=Formlet.Horizontal(formlet);
+      return Enhance.WithFormContainer(formlet1);
      }),
      FileControl:Runtime.Field(function()
      {
@@ -66,7 +86,7 @@
        formlet1=Controls.ReadOnlyTextArea("");
        formlet2=Enhance.WithTextLabel("Output",formlet1);
        formlet3=Enhance.WithLabelAbove(formlet2);
-       return _builder_.Bind(Client1.setFormSize("200px","600px","textarea",formlet3),function(_arg1)
+       return _builder_.Bind(Client1.setFormSize("220px","600px","textarea",formlet3),function(_arg1)
        {
         var formlet4,formlet5;
         formlet4=Controls.Checkbox(false);
@@ -112,7 +132,7 @@
       formlet=Formlet.OfElement(function()
       {
        var arg10;
-       arg10=List.ofArray([Attr.Attr().NewAttr("style","height: 200px; width: 300px"),Attr.Attr().NewAttr("src","graph(kindof).jpg"),Attr.Attr().NewAttr("border","4px")]);
+       arg10=List.ofArray([Attr.Attr().NewAttr("style","height: 220px; width: 330px"),Attr.Attr().NewAttr("src","graph(kindof).jpg"),Attr.Attr().NewAttr("border","4px")]);
        return Tags.Tags().NewTag("img",arg10);
       });
       formlet1=Enhance.WithTextLabel("Graph visualisation",formlet);
@@ -205,8 +225,9 @@
   Client=Runtime.Safe(Html.Client);
   Attr=Runtime.Safe(Client.Attr);
   Tags=Runtime.Safe(Client.Tags);
-  Controls=Runtime.Safe(Formlets.Controls);
+  T=Runtime.Safe(List.T);
   Enhance=Runtime.Safe(Formlets.Enhance);
+  Controls=Runtime.Safe(Formlets.Controls);
   YC=Runtime.Safe(Global.YC);
   BioGraph=Runtime.Safe(YC.BioGraph);
   Client1=Runtime.Safe(BioGraph.Client);

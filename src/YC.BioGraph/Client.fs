@@ -25,9 +25,19 @@ module Client =
             e)
 
     let ChooseDefaultControl = //opens the list of default grammars/graphs
-       wsff.OfElement (fun () ->
-            Input [Attr.Type "button"; Attr.Value "Choose default"; Attr.Style "color: #000000"]
-        )
+        wsff.Do {
+            let! button = 
+                wsff.OfElement (fun () ->
+                    Input [Attr.Type "button"; Attr.Value "Choose default"; Attr.Style "color: #000000"]
+            )
+            let! list = 
+                wsff.OfElement (fun () ->
+                    Select []
+            )
+            return (button, list)
+            }  
+            |> wsff.Horizontal
+            |> wsfe.WithFormContainer                 
    
     let FileControl = 
         wsff.OfElement (fun () ->
@@ -73,7 +83,7 @@ module Client =
                 wsfc.ReadOnlyTextArea""   
                 |> wsfe.WithTextLabel "Output"
                 |> wsfe.WithLabelAbove                  
-                |> setFormSize "200px" "600px" "textarea"
+                |> setFormSize "220px" "600px" "textarea"
             let! wrapCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "wrap" |> wsfe.WithLabelLeft
             return (wrapCheckbox, output)
         }
@@ -81,7 +91,7 @@ module Client =
     
     let ShowImageControl = //add border
        wsff.OfElement (fun () ->
-            Img[Attr.Style "height: 200px; width: 300px"; Attr.Src "graph(kindof).jpg"; Attr.Border "4px"]
+            Img[Attr.Style "height: 220px; width: 330px"; Attr.Src "graph(kindof).jpg"; Attr.Border "4px"]
         )
        |> wsfe.WithTextLabel "Graph visualisation"
        |> wsfe.WithLabelAbove 
