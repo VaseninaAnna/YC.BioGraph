@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,FormButtonConfiguration,String,jQuery;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,Remoting,AjaxRemotingProvider,FormButtonConfiguration,String,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
@@ -146,9 +146,25 @@
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       return _builder_.Bind(Client.InputControl("Grammar",List.ofArray([["Grammar 1",""],["Grammar 2",""],["Grammar 3",""]])),function(_arg1)
+       var mapping,list;
+       mapping=function(grmName)
        {
-        return _builder_.Bind(Client.InputControl("Graph",List.ofArray([["Graph 1",""],["Graph 2",""],["Graph 3",""]])),function(_arg2)
+        return[grmName,""];
+       };
+       list=AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
+        $:1
+       }]);
+       return _builder_.Bind(Client.InputControl("Grammar",List.map(mapping,list)),function(_arg1)
+       {
+        var mapping1,list1;
+        mapping1=function(grmName)
+        {
+         return[grmName,""];
+        };
+        list1=AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
+         $:0
+        }]);
+        return _builder_.Bind(Client.InputControl("Graph",List.map(mapping1,list1)),function(_arg2)
         {
          return _builder_.Bind(Client.RangeControl(),function(_arg3)
          {
@@ -247,6 +263,8 @@
   Client1=Runtime.Safe(Html.Client);
   Attr=Runtime.Safe(Client1.Attr);
   Tags=Runtime.Safe(Client1.Tags);
+  Remoting=Runtime.Safe(Global.WebSharper.Remoting);
+  AjaxRemotingProvider=Runtime.Safe(Remoting.AjaxRemotingProvider);
   FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
   String=Runtime.Safe(Global.String);
   return jQuery=Runtime.Safe(Global.jQuery);

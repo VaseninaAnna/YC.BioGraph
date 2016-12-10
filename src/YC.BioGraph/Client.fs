@@ -102,8 +102,8 @@ module Client =
          
         let InputForm  =
             wsff.Do {                
-                let! grammar = InputControl "Grammar" [("Grammar 1", ""); ("Grammar 2", ""); ("Grammar 3", "")]
-                let! graph = InputControl "Graph" [("Graph 1", ""); ("Graph 2", ""); ("Graph 3", "")]
+                let! grammar = InputControl "Grammar" (Server.LoadDefaultFileNames Server.FileType.Grammar |> List.map (fun grmName -> grmName, ""))
+                let! graph = InputControl "Graph" (Server.LoadDefaultFileNames Server.FileType.Graph |> List.map (fun grmName -> grmName, ""))
                 let! range = RangeControl
                 let! checkbox = wsfc.Checkbox false |> wsfe.WithTextLabel "DRAW GRAPH" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
                 return (grammar, graph, range, checkbox)

@@ -3,6 +3,10 @@ namespace YC.BioGraph
 open WebSharper
 
 module Server =
+    type FileType =
+        | Graph
+        | Grammar
+
     type Nuc = | A | C | G | U
 
     type Edge = Edge of s:int * t:int * n:Nuc * f:bool
@@ -30,17 +34,34 @@ module Server =
         async {
             return R input
         }
+        
+    [<Rpc>]
+    let LoadDefaultFileNames (fileType: FileType) =
+        match fileType with
+        | Grammar ->
+            [
+                "A"
+                "B"
+            ]
+        | Graph ->
+            [
+                "A"
+                "B"
+            ]
 
     [<Rpc>]
-    let LoadDefaultFiles () =
-        [| "A"; "B" |]
-
-    [<Rpc>]
-    let LoadDefaultFile name =
-        match name with
-        | "A" -> "AAA"
-        | "B" -> "BBB"
-        |  _  -> ""
+    let LoadDefaultFile (fileType: FileType) name =
+        match fileType with
+        | Grammar ->
+            match name with
+            | "A" -> "A grammar value"
+            | "B" -> "B grammar value"
+            |  _  -> ""
+        | Graph ->
+            match name with
+            | "A" -> "A graph value"
+            | "B" -> "B graph value"
+            |  _  -> ""
 
     [<Rpc>]
     let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
