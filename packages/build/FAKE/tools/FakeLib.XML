@@ -1033,7 +1033,7 @@
  Creates an attribute which holds the product title
 </summary>
 </member>
-<member name="M:Fake.AssemblyInfoFile.Attribute.StringAttribute(System.String,System.String,System.String)">
+<member name="M:Fake.AssemblyInfoFile.Attribute.StringAttribute(System.String,System.String,System.String,Microsoft.FSharp.Core.FSharpOption{System.String},Microsoft.FSharp.Core.FSharpOption{System.String})">
 <summary>
  Creates a simple attribute with string values. Used as base for other attributes
 </summary>
@@ -3014,294 +3014,59 @@
  Contains a task which can be used to run [DotCover](http://www.jetbrains.com/dotcover/) on .NET assemblies.
 </summary>
 </member>
-<member name="P:Fake.DotNet.PackParams.AdditionalArgs">
+<member name="P:Fake.DotNetCli.PublishParams.AdditionalArgs">
 <summary>
  Additional Args
 </summary>
 </member>
-<member name="P:Fake.DotNet.PackParams.Configuration">
+<member name="P:Fake.DotNetCli.PublishParams.Output">
 <summary>
- The build configuration.
+ Optional outputh path
 </summary>
 </member>
-<member name="P:Fake.DotNet.PackParams.TimeOut">
-<summary>
- A timeout for the command.
-</summary>
-</member>
-<member name="P:Fake.DotNet.PackParams.WorkingDir">
-<summary>
- Working directory (optional).
-</summary>
-</member>
-<member name="P:Fake.DotNet.PackParams.VersionSuffix">
+<member name="P:Fake.DotNetCli.PublishParams.VersionSuffix">
 <summary>
  Optional version suffix.
 </summary>
 </member>
-<member name="P:Fake.DotNet.PackParams.OutputPath">
-<summary>
- Optional output path.
-</summary>
-</member>
-<member name="P:Fake.DotNet.PackParams.ToolPath">
-<summary>
- ToolPath - usually just &quot;dotnet&quot;
-</summary>
-</member>
-<member name="T:Fake.DotNet.PackParams">
-<summary>
- DotNet pack parameters
-</summary>
-</member>
-<member name="P:Fake.DotNet.TestParams.AdditionalArgs">
-<summary>
- Additional Args
-</summary>
-</member>
-<member name="P:Fake.DotNet.TestParams.Runtime">
+<member name="P:Fake.DotNetCli.PublishParams.Runtime">
 <summary>
  Allows to test a specific runtime
 </summary>
 </member>
-<member name="P:Fake.DotNet.TestParams.Framework">
+<member name="P:Fake.DotNetCli.PublishParams.Framework">
 <summary>
- Allows to test a specific framework
+ Allows to publish to a specific framework
 </summary>
 </member>
-<member name="P:Fake.DotNet.TestParams.Configuration">
+<member name="P:Fake.DotNetCli.PublishParams.Configuration">
 <summary>
  The build configuration.
 </summary>
 </member>
-<member name="P:Fake.DotNet.TestParams.TimeOut">
+<member name="P:Fake.DotNetCli.PublishParams.Project">
+<summary>
+ Project (optional).
+</summary>
+</member>
+<member name="P:Fake.DotNetCli.PublishParams.TimeOut">
 <summary>
  A timeout for the command.
 </summary>
 </member>
-<member name="P:Fake.DotNet.TestParams.WorkingDir">
+<member name="P:Fake.DotNetCli.PublishParams.WorkingDir">
 <summary>
  Working directory (optional).
 </summary>
 </member>
-<member name="P:Fake.DotNet.TestParams.ToolPath">
+<member name="P:Fake.DotNetCli.PublishParams.ToolPath">
 <summary>
  ToolPath - usually just &quot;dotnet&quot;
 </summary>
 </member>
-<member name="T:Fake.DotNet.TestParams">
+<member name="T:Fake.DotNetCli.PublishParams">
 <summary>
- DotNet test parameters
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.AdditionalArgs">
-<summary>
- Additional Args
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.Runtime">
-<summary>
- Allows to build for a specific runtime
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.Framework">
-<summary>
- Allows to build for a specific framework
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.Configuration">
-<summary>
- The build configuration.
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.TimeOut">
-<summary>
- A timeout for the command.
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.WorkingDir">
-<summary>
- Working directory (optional).
-</summary>
-</member>
-<member name="P:Fake.DotNet.BuildParams.ToolPath">
-<summary>
- ToolPath - usually just &quot;dotnet&quot;
-</summary>
-</member>
-<member name="T:Fake.DotNet.BuildParams">
-<summary>
- DotNet build parameters
-</summary>
-</member>
-<member name="P:Fake.DotNet.RestoreParams.AdditionalArgs">
-<summary>
- Additional Args
-</summary>
-</member>
-<member name="P:Fake.DotNet.RestoreParams.Verbosity">
-<summary>
- Log Verbosity.
-</summary>
-</member>
-<member name="P:Fake.DotNet.RestoreParams.NoCache">
-<summary>
- Whether to use the NuGet cache.
-</summary>
-</member>
-<member name="P:Fake.DotNet.RestoreParams.TimeOut">
-<summary>
- A timeout for the command.
-</summary>
-</member>
-<member name="P:Fake.DotNet.RestoreParams.WorkingDir">
-<summary>
- Working directory (optional).
-</summary>
-</member>
-<member name="P:Fake.DotNet.RestoreParams.ToolPath">
-<summary>
- ToolPath - usually just &quot;dotnet&quot;
-</summary>
-</member>
-<member name="T:Fake.DotNet.RestoreParams">
-<summary>
- DotNet restore parameters
-</summary>
-</member>
-<member name="P:Fake.DotNet.CommandParams.TimeOut">
-<summary>
- A timeout for the command.
-</summary>
-</member>
-<member name="P:Fake.DotNet.CommandParams.WorkingDir">
-<summary>
- Working directory (optional).
-</summary>
-</member>
-<member name="P:Fake.DotNet.CommandParams.ToolPath">
-<summary>
- ToolPath - usually just &quot;dotnet&quot;
-</summary>
-</member>
-<member name="T:Fake.DotNet.CommandParams">
-<summary>
- DotNet parameters
-</summary>
-</member>
-<member name="T:Fake.DotNet.Verbosity">
-<summary>
- DotNet logger verbosity
-</summary>
-</member>
-<member name="M:Fake.DotNet.SetVersionInProjectJson(System.String,System.String)">
-<summary>
- Sets version in project.json
-</summary>
-</member>
-<member name="M:Fake.DotNet.Pack(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNet.PackParams,Fake.DotNet.PackParams},System.Collections.Generic.IEnumerable{System.String})">
-<summary>
- Runs the dotnet &quot;pack&quot; command.
- ## Parameters
-
-  - `setPackParams` - Function used to overwrite the pack default parameters.
-
- ## Sample
-
-     !! &quot;src/test/project.json&quot;
-     |&gt; DotNet.Pack
-         (fun p -&gt; 
-              { p with 
-                   Configuration = &quot;Release&quot; })
-</summary>
-</member>
-<member name="M:Fake.DotNet.Test(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNet.TestParams,Fake.DotNet.TestParams},System.Collections.Generic.IEnumerable{System.String})">
-<summary>
- Runs the dotnet &quot;test&quot; command.
- ## Parameters
-
-  - `setTestParams` - Function used to overwrite the test default parameters.
-
- ## Sample
-
-     !! &quot;src/test/project.json&quot;
-     |&gt; DotNet.Test
-         (fun p -&gt; 
-              { p with 
-                   Configuration = &quot;Release&quot; })
-</summary>
-</member>
-<member name="M:Fake.DotNet.Build(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNet.BuildParams,Fake.DotNet.BuildParams},System.Collections.Generic.IEnumerable{System.String})">
-<summary>
- Runs the dotnet &quot;build&quot; command.
- ## Parameters
-
-  - `setBuildParams` - Function used to overwrite the build default parameters.
-
- ## Sample
-
-     !! &quot;src/test/project.json&quot;
-     |&gt; DotNet.Build
-         (fun p -&gt; 
-              { p with 
-                   Configuration = &quot;Release&quot; })
-</summary>
-</member>
-<member name="M:Fake.DotNet.Restore(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNet.RestoreParams,Fake.DotNet.RestoreParams})">
-<summary>
- Runs the dotnet &quot;restore&quot; command.
- ## Parameters
-
-  - `setRestoreParams` - Function used to overwrite the restore default parameters.
-
- ## Sample
-
-     DotNet.Restore 
-         (fun p -&gt; 
-              { p with 
-                   NoCache = true })
-</summary>
-</member>
-<member name="M:Fake.DotNet.RunCommand(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNet.CommandParams,Fake.DotNet.CommandParams},System.String)">
-<summary>
- Runs a dotnet command.
- ## Parameters
-
-  - `setCommandParams` - Function used to overwrite the default parameters.
-  - `args` - command and additional arguments.
-
- ## Sample
-
-     DotNet.RunCommand
-         (fun p -&gt; 
-              { p with 
-                   TimeOut = TimeSpan.FromMinutes 10. })
-         &quot;restore&quot;
-</summary>
-</member>
-<member name="M:Fake.DotNet.isInstalled">
-<summary>
- Checks wether the dotnet CLI is installed
-</summary>
-</member>
-<member name="M:Fake.DotNet.getVersion">
-<summary>
- Gets the installed dotnet version
-</summary>
-</member>
-<member name="P:Fake.DotNet.DefaultVerbosity">
-<summary>
- The default log verbosity
-</summary>
-</member>
-<member name="P:Fake.DotNet.commandName">
-<summary>
- The dotnet command name
-</summary>
-</member>
-<member name="T:Fake.DotNet">
-<summary>
- Contains a task which can be used to run dotnet CLI commands.
+ DotNet publish parameters
 </summary>
 </member>
 <member name="P:Fake.DotNetCli.PackParams.AdditionalArgs">
@@ -3322,6 +3087,11 @@
 <member name="P:Fake.DotNetCli.PackParams.WorkingDir">
 <summary>
  Working directory (optional).
+</summary>
+</member>
+<member name="P:Fake.DotNetCli.PackParams.Project">
+<summary>
+ Project (optional).
 </summary>
 </member>
 <member name="P:Fake.DotNetCli.PackParams.VersionSuffix">
@@ -3364,6 +3134,11 @@
  The build configuration.
 </summary>
 </member>
+<member name="P:Fake.DotNetCli.TestParams.Project">
+<summary>
+ Project (optional).
+</summary>
+</member>
 <member name="P:Fake.DotNetCli.TestParams.TimeOut">
 <summary>
  A timeout for the command.
@@ -3404,6 +3179,11 @@
  The build configuration.
 </summary>
 </member>
+<member name="P:Fake.DotNetCli.BuildParams.Project">
+<summary>
+ Project (optional).
+</summary>
+</member>
 <member name="P:Fake.DotNetCli.BuildParams.TimeOut">
 <summary>
  A timeout for the command.
@@ -3429,11 +3209,6 @@
  Additional Args
 </summary>
 </member>
-<member name="P:Fake.DotNetCli.RestoreParams.Verbosity">
-<summary>
- Log Verbosity.
-</summary>
-</member>
 <member name="P:Fake.DotNetCli.RestoreParams.NoCache">
 <summary>
  Whether to use the NuGet cache.
@@ -3442,6 +3217,11 @@
 <member name="P:Fake.DotNetCli.RestoreParams.TimeOut">
 <summary>
  A timeout for the command.
+</summary>
+</member>
+<member name="P:Fake.DotNetCli.RestoreParams.Project">
+<summary>
+ Project (optional).
 </summary>
 </member>
 <member name="P:Fake.DotNetCli.RestoreParams.WorkingDir">
@@ -3479,17 +3259,27 @@
  DotNet parameters
 </summary>
 </member>
-<member name="T:Fake.DotNetCli.Verbosity">
-<summary>
- DotNet logger verbosity
-</summary>
-</member>
 <member name="M:Fake.DotNetCli.SetVersionInProjectJson(System.String,System.String)">
 <summary>
  Sets version in project.json
 </summary>
 </member>
-<member name="M:Fake.DotNetCli.Pack(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.PackParams,Fake.DotNetCli.PackParams},System.Collections.Generic.IEnumerable{System.String})">
+<member name="M:Fake.DotNetCli.Publish(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.PublishParams,Fake.DotNetCli.PublishParams})">
+<summary>
+ Runs the dotnet &quot;publish&quot; command.
+ ## Parameters
+
+  - `setPublishParams` - Function used to overwrite the publish default parameters.
+
+ ## Sample
+
+     DotNetCli.Publish
+       (fun p -&gt; 
+            { p with 
+                 Configuration = &quot;Release&quot; })
+</summary>
+</member>
+<member name="M:Fake.DotNetCli.Pack(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.PackParams,Fake.DotNetCli.PackParams})">
 <summary>
  Runs the dotnet &quot;pack&quot; command.
  ## Parameters
@@ -3498,14 +3288,13 @@
 
  ## Sample
 
-     !! &quot;src/test/project.json&quot;
-     |&gt; DotNetCli.Pack
-         (fun p -&gt; 
-              { p with 
-                   Configuration = &quot;Release&quot; })
+     DotNetCli.Pack
+       (fun p -&gt; 
+            { p with 
+                 Configuration = &quot;Release&quot; })
 </summary>
 </member>
-<member name="M:Fake.DotNetCli.Test(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.TestParams,Fake.DotNetCli.TestParams},System.Collections.Generic.IEnumerable{System.String})">
+<member name="M:Fake.DotNetCli.Test(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.TestParams,Fake.DotNetCli.TestParams})">
 <summary>
  Runs the dotnet &quot;test&quot; command.
  ## Parameters
@@ -3514,14 +3303,13 @@
 
  ## Sample
 
-     !! &quot;src/test/project.json&quot;
-     |&gt; DotNetCli.Test
-         (fun p -&gt; 
-              { p with 
-                   Configuration = &quot;Release&quot; })
+     DotNetCli.Test
+       (fun p -&gt; 
+            { p with 
+                 Configuration = &quot;Release&quot; })
 </summary>
 </member>
-<member name="M:Fake.DotNetCli.Build(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.BuildParams,Fake.DotNetCli.BuildParams},System.Collections.Generic.IEnumerable{System.String})">
+<member name="M:Fake.DotNetCli.Build(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.BuildParams,Fake.DotNetCli.BuildParams})">
 <summary>
  Runs the dotnet &quot;build&quot; command.
  ## Parameters
@@ -3530,11 +3318,10 @@
 
  ## Sample
 
-     !! &quot;src/test/project.json&quot;
-     |&gt; DotNetCli.Build
-         (fun p -&gt; 
-              { p with 
-                   Configuration = &quot;Release&quot; })
+     DotNetCli.Build
+       (fun p -&gt; 
+            { p with 
+                 Configuration = &quot;Release&quot; })
 </summary>
 </member>
 <member name="M:Fake.DotNetCli.Restore(Microsoft.FSharp.Core.FSharpFunc{Fake.DotNetCli.RestoreParams,Fake.DotNetCli.RestoreParams})">
@@ -3577,11 +3364,6 @@
 <member name="M:Fake.DotNetCli.getVersion">
 <summary>
  Gets the installed dotnet version
-</summary>
-</member>
-<member name="P:Fake.DotNetCli.DefaultVerbosity">
-<summary>
- The default log verbosity
 </summary>
 </member>
 <member name="P:Fake.DotNetCli.commandName">
@@ -5905,6 +5687,11 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
  Runs the given git command, waits for its completion.
 </summary>
 </member>
+<member name="M:Fake.Git.CommandHelper.directRunGitCommandAndFail(System.String,System.String)">
+<summary>
+ Runs the given git command, waits for its completion and fails when it didn&apos;t succeeded.
+</summary>
+</member>
 <member name="M:Fake.Git.CommandHelper.directRunGitCommand(System.String,System.String)">
 <summary>
  Runs the given git command, waits for its completion and returns whether it succeeded.
@@ -5965,7 +5752,7 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
  Gets the commit message
 </summary>
 </member>
-<member name="M:Fake.Git.CommitMessage.getCommitMessageFileInfo(System.String)">
+<member name="M:Fake.Git.CommitMessage.getCommitMessageFileInfos(System.String)">
 <summary>
  Returns the commit message file.
 </summary>
@@ -10471,6 +10258,49 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
  Conatins a task which allows to perform file copies using [SCP](http://en.wikipedia.org/wiki/Secure_copy), which is based on the Secure Shell (SSH) protocol.
 </summary>
 </member>
+<member name="P:Fake.SSHHelper.SSHParams.RemoteUser">
+<summary>
+ remote User
+</summary>
+</member>
+<member name="P:Fake.SSHHelper.SSHParams.PrivateKeyPath">
+<summary>
+ Path of the private key file (optional)
+</summary>
+</member>
+<member name="P:Fake.SSHHelper.SSHParams.ToolPath">
+<summary>
+ Path of the scp.exe 
+</summary>
+</member>
+<member name="T:Fake.SSHHelper.SSHParams">
+<summary>
+ The SSH parameter type.
+</summary>
+</member>
+<member name="M:Fake.SSHHelper.SSH(Microsoft.FSharp.Core.FSharpFunc{Fake.SSHHelper.SSHParams,Fake.SSHHelper.SSHParams},System.String)">
+<summary>
+ Performs a command via SSH.
+ ## Parameters
+
+  - `setParams` - Function used to manipulate the default SSHParams value.
+  - `command` - The target path. Can be something like user@host:directory/TargetFile or a local path.
+
+ ## Sample
+
+     SSH (fun p -&gt; { p with ToolPath = &quot;tools/ssh.exe&quot; }) command
+</summary>
+</member>
+<member name="P:Fake.SSHHelper.SSHDefaults">
+<summary>
+ The SSH default parameters
+</summary>
+</member>
+<member name="T:Fake.SSHHelper">
+<summary>
+ Conatins a task which allows to perform SSH operations
+</summary>
+</member>
 <member name="P:Fake.SemVerHelper.SemVerInfo.Build">
 <summary>
  The optional build no.
@@ -10917,9 +10747,18 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
  The supported commands of Sonar Qube. It is called with Begin before compilation, and End after compilation.
 </summary>
 </member>
+<member name="M:Fake.SonarQubeHelper.SonarQubeEnd">
+<summary>
+ This task can be used to run the end command of [Sonar Qube](http://sonarqube.org/) on a project.
+
+ ## Sample
+   SonarQubeEnd
+
+</summary>
+</member>
 <member name="M:Fake.SonarQubeHelper.SonarQube(Fake.SonarQubeHelper.SonarQubeCall,Microsoft.FSharp.Core.FSharpFunc{Fake.SonarQubeHelper.SonarQubeParams,Fake.SonarQubeHelper.SonarQubeParams})">
 <summary>
- This task to can be used to run [Sonar Qube](http://conarqube.org/) on a project.
+ This task to can be used to run [Sonar Qube](http://sonarqube.org/) on a project.
  ## Parameters
 
   - `call` - Begin or End, to start analysis or finish it
@@ -10969,6 +10808,11 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
 <member name="T:Fake.SpecFlowHelper">
 <summary>
  Contains a task which allows to run [SpecFlow](http://www.specflow.org/) tests.
+</summary>
+</member>
+<member name="P:Fake.Sql.DacPac.DeployDbArgs.AdditionalSqlPackageProperties">
+<summary>
+ Additional configuration parameters required by sqlpackage.exe
 </summary>
 </member>
 <member name="P:Fake.Sql.DacPac.DeployDbArgs.RecreateDb">
@@ -11044,6 +10888,11 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
 <member name="P:Fake.Sql.DacPac.defaultDeploymentArgs">
 <summary>
  The default DacPac deployment arguments.
+</summary>
+</member>
+<member name="P:Fake.Sql.DacPac.PropertyKeys.sqlAzureDbSize">
+<summary>
+ When creating a new SQL Azure database, specifies the database service tier to use e.g. S2, P1
 </summary>
 </member>
 <member name="T:Fake.Sql.DacPac">
@@ -13068,6 +12917,12 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
  Traces the message to the console
 </summary>
 </member>
+<member name="M:Fake.TraceHelper.traceStartTaskUsing(System.String,System.String)">
+<summary>
+ Traces the begin of a task and closes it again after disposing of the return value
+ (call it with &apos;use&apos;)
+</summary>
+</member>
 <member name="M:Fake.TraceHelper.traceEndTask(System.String,System.String)">
 <summary>
  Traces the end of a task
@@ -14694,6 +14549,11 @@ hidden
  Represents the registry root under which this key should be written
 </summary>
 </member>
+<member name="P:Fake.WiXHelper.WiXServiceInstall.ServiceConfig">
+<summary>
+ Service configuration information for failure actions.
+</summary>
+</member>
 <member name="P:Fake.WiXHelper.WiXServiceInstall.ServiceDependencies">
 <summary>
  Services or groups of services that must start before the parent service.
@@ -14789,6 +14649,56 @@ hidden
 <member name="T:Fake.WiXHelper.WiXServiceDependency">
 <summary>
  Service or group of services that must start before the parent service.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.ThirdFailureActionType">
+<summary>
+ [Required] Action to take on the third failure of the service.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.ServiceName">
+<summary>
+ Required if not under a ServiceInstall element.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.SecondFailureActionType">
+<summary>
+ [Required] Action to take on the second failure of the service.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.RestartServiceDelayInSeconds">
+<summary>
+ If any of the three *ActionType attributes is &quot;restart&quot;, this specifies the number of seconds to wait before doing so.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.ResetPeriodInDays">
+<summary>
+ Number of days after which to reset the failure count to zero if there are no failures.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.RebootMessage">
+<summary>
+ If any of the three *ActionType attributes is &quot;reboot&quot;, this specifies the message to broadcast to server users before doing so.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.ProgramCommandLine">
+<summary>
+ If any of the three *ActionType attributes is &quot;runCommand&quot;, this specifies the command to run when doing so. This value is formatted.
+</summary>
+</member>
+<member name="P:Fake.WiXHelper.WiXServiceConfig.FirstFailureActionType">
+<summary>
+ [Required] Determines the type of the service failure action.
+</summary>
+</member>
+<member name="T:Fake.WiXHelper.WiXServiceConfig">
+<summary>
+ Service configuration information for failure actions.
+</summary>
+</member>
+<member name="T:Fake.WiXHelper.ServiceFailureActionType">
+<summary>
+ Determines the type of the service failure action.
 </summary>
 </member>
 <member name="T:Fake.WiXHelper.ServiceInstallType.SystemDriver">
@@ -15399,6 +15309,11 @@ get component refs from a directory component hierarchy
 <member name="M:Fake.WiXHelper.generateServiceDependency(Microsoft.FSharp.Core.FSharpFunc{Fake.WiXHelper.WiXServiceDependency,Fake.WiXHelper.WiXServiceDependency})">
 <summary>
  Use this for generating service dependencies
+</summary>
+</member>
+<member name="M:Fake.WiXHelper.generateServiceConfig(Microsoft.FSharp.Core.FSharpFunc{Fake.WiXHelper.WiXServiceConfig,Fake.WiXHelper.WiXServiceConfig})">
+<summary>
+ Use this for generating service configs
 </summary>
 </member>
 <member name="M:Fake.WiXHelper.generateServiceControl(Microsoft.FSharp.Core.FSharpFunc{Fake.WiXHelper.WiXServiceControl,Fake.WiXHelper.WiXServiceControl})">
@@ -16389,6 +16304,31 @@ get component refs from a directory component hierarchy
 <member name="M:Yaaf.FSharp.Scripting.Extensions.IFsiSession.EvalExpression``1(Yaaf.FSharp.Scripting.IFsiSession,System.String)">
 <summary>
  Evaluate the given expression and return its result.
+</summary>
+</member>
+<member name="M:Yaaf.FSharp.Scripting.Extensions.IFsiSession.EvalScriptAsInteraction(Yaaf.FSharp.Scripting.IFsiSession,System.String)">
+<summary>
+ See https://github.com/Microsoft/visualfsharp/issues/1392
+</summary>
+</member>
+<member name="M:Yaaf.FSharp.Scripting.Extensions.IFsiSession.EvalScriptAsInteractionWithOutput(Yaaf.FSharp.Scripting.IFsiSession,System.String)">
+<summary>
+ See https://github.com/Microsoft/visualfsharp/issues/1392
+</summary>
+</member>
+<member name="M:Yaaf.FSharp.Scripting.StringHelpers.String.splitUnescape(System.Char,System.String,System.String)">
+<summary>
+ Reproduces the original substrings from a string created with concatEscape.
+</summary>
+</member>
+<member name="M:Yaaf.FSharp.Scripting.StringHelpers.String.concatEscape(System.Char,System.String,System.Collections.Generic.IEnumerable{System.String})">
+<summary>
+ Returns a new string by connecting the given strings with the given separator.
+</summary>
+</member>
+<member name="M:Yaaf.FSharp.Scripting.StringHelpers.Tokenizer.create(System.Char,System.String)">
+<summary>
+ Returns a function who can convert a given source string to a token stream.
 </summary>
 </member>
 <member name="M:Yaaf.FSharp.Scripting.CompilerServiceExtensions.Type.get_FSharpFullNameWithTypeArgs(System.Type)">

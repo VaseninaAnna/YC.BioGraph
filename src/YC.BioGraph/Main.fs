@@ -51,10 +51,7 @@ module Site =
         ]
 
     let AboutPage ctx =
-        Templating.Main ctx EndPoint.About "About" [
-            H1 [Text "About"]
-            P [Text "This is the best application you've ever seen."]
-        ]
+        Content.RedirectPermanentToUrl "https://github.com/Bio-graph-group/YC.BioGraph/wiki"
 
     [<Website>]
     let Main =
