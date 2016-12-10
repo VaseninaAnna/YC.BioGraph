@@ -30,8 +30,8 @@ module Templating =
                 A [Attr.HRef (ctx.Link act)] -< [Text txt]
              ]
         [
-            LI ["Home" => EndPoint.Home]
-            LI ["About" => EndPoint.About]
+            //LI ["Home" => EndPoint.Home]
+            //LI [ "About" => EndPoint.About]
         ]
 
     let Main ctx endpoint title body : Async<Content<EndPoint>> =
