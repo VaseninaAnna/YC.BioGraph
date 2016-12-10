@@ -5,6 +5,7 @@ open WebSharper
 open WebSharper.JavaScript
 open WebSharper.Html.Client
 
+
 module wsfc = WebSharper.Formlets.Controls
 module wsfe = WebSharper.Formlets.Enhance
 module wsfd = WebSharper.Formlets.Data
@@ -16,7 +17,13 @@ module wsfl = WebSharper.Formlets.Layout
 [<JavaScript>]
 module Client =
 
-    let setFormSize (height: string) (width: string) (formletType: string) (formlet: Formlets.Data.Formlet<'c>) =
+    let screenWidth = JQuery.JQuery.Of("html").Width()
+    let screenHeight = JQuery.JQuery.Of("html").Height()
+
+    let getFormSize (height: int) (width: int) = //gets height and width of the form in px relative to the screen size
+        ((height * screenHeight / 648).ToString() + "px", (width * screenWidth / 1366).ToString() + "px")
+
+    let setFormSize ((height: string), (width: string)) (formletType: string) (formlet: Formlets.Data.Formlet<'c>) =
         formlet |> wsff.MapElement (fun e ->
             JQuery.JQuery.Of(e.Dom.QuerySelector(formletType))
                 .Css("height", height) 
@@ -24,36 +31,31 @@ module Client =
                 .Ignore
             e)
 
-    let ChooseDefaultControl = //opens the list of default grammars/graphs
+    let ChooseDefaultControl (defaultData: List<string * string>) = 
         wsff.Do {
-            let! button = 
-                wsff.OfElement (fun () ->
-                    Input [Attr.Type "button"; Attr.Value "Choose default"; Attr.Style "color: #000000"]
-            )
-            let! list = 
-                wsff.OfElement (fun () ->
-                    Select []
-            )
-            return (button, list)
+            let! dataSelect = 
+                wsfc.Select 0 defaultData
+                |> wsfe.WithTextLabel "Choose default"
+                |> setFormSize (getFormSize 30 210) "select" 
+                |> wsfe.WithFormContainer     
+            return (dataSelect)
             }  
-            |> wsff.Horizontal
-            |> wsfe.WithFormContainer                 
-   
+
     let FileControl = 
         wsff.OfElement (fun () ->
-            Input [Attr.Type "file"; Attr.Lang "en"] //set english lang
+            Input [Attr.Type "file"] 
         )
     
-    let InputControl lbl =
+    let InputControl lbl defaultData =
         wsff.Do {
             let! textInput =
-                wsfc.TextArea ""                    
+                wsfc.TextArea ""              
                 |> wsfe.WithTextLabel lbl
                 |> wsfe.WithLabelAbove
-                |> setFormSize "100px" "500px" "textarea"
+                |> setFormSize (getFormSize 85 500) "textarea"
             let! fileInput = FileControl
-            let! chooseButton = ChooseDefaultControl
-            return (textInput, fileInput, chooseButton)             
+            let! defaultSelect = ChooseDefaultControl defaultData
+            return (textInput, fileInput, defaultSelect)             
         }
         |> wsff.Vertical
         |> wsfe.WithFormContainer
@@ -61,15 +63,13 @@ module Client =
     let RangeControl =
         wsff.Do {                
             let! min = 
-                wsfc.Input "1" 
+                wsfc.Input ""
                 |> wsfe.WithTextLabel "from" 
-                |> wsfd.Validator.IsInt "Enter numericr value"
-                |> setFormSize "30px" "210px" "input"
+                |> setFormSize (getFormSize 30 210) "input"
             let! max  = 
-                wsfc.Input "5" 
+                wsfc.Input "" 
                 |> wsfe.WithTextLabel "to" 
-                |> wsfd.Validator.IsInt "Enter numericr value" 
-                |> setFormSize "30px" "210px" "input"      
+                |> setFormSize (getFormSize 30 210) "input"      
             return (int min, int max)
         }
         |> wsff.Horizontal 
@@ -80,29 +80,30 @@ module Client =
     let OutputControl = 
         wsff.Do {
             let! output =
-                wsfc.ReadOnlyTextArea""   
+                wsfc.ReadOnlyTextArea "" 
                 |> wsfe.WithTextLabel "Output"
                 |> wsfe.WithLabelAbove                  
-                |> setFormSize "220px" "600px" "textarea"
+                |> setFormSize (getFormSize 85 500) "textarea"
             let! wrapCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "wrap" |> wsfe.WithLabelLeft
             return (wrapCheckbox, output)
         }
         |> wsfe.WithFormContainer
     
-    let ShowImageControl = //add border
+    let ShowImageControl = 
        wsff.OfElement (fun () ->
-            Img[Attr.Style "height: 220px; width: 330px"; Attr.Src "graph(kindof).jpg"; Attr.Border "4px"]
+            let hw = "height: " + fst(getFormSize 315 315) + "; width: " + fst(getFormSize 315 315)
+            Img[Attr.Style hw; Attr.Src "graph(kindof).jpg"]
         )
        |> wsfe.WithTextLabel "Graph visualisation"
        |> wsfe.WithLabelAbove 
        |> wsfe.WithFormContainer     
 
-    let frm =        
-     
+    let frm =   
+         
         let InputForm  =
             wsff.Do {                
-                let! grammar = InputControl "Grammar"
-                let! graph = InputControl "Graph"
+                let! grammar = InputControl "Grammar" [("Grammar 1", ""); ("Grammar 2", ""); ("Grammar 3", "")]
+                let! graph = InputControl "Graph" [("Graph 1", ""); ("Graph 2", ""); ("Graph 3", "")]
                 let! range = RangeControl
                 let! checkbox = wsfc.Checkbox false |> wsfe.WithTextLabel "DRAW GRAPH" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
                 return (grammar, graph, range, checkbox)
@@ -117,6 +118,7 @@ module Client =
             }
             |> wsff.Vertical 
         
+        let style = "background-color: #FF1493; border-width: 3px; border-color: #000000; height: " + fst(getFormSize 40 80) + "; width: " + snd(getFormSize 40 80) + "; font-size:" +  fst(getFormSize 30 80); 
         wsff.Do {
             let! x = InputForm
             let! y = OutputForm
@@ -125,8 +127,8 @@ module Client =
         |> wsff.Horizontal
         |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
                                                                                    Label = Some "GO" 
-                                                                                   Style=Some "background-color: #FF1493; font-size: 30px; height: 40px; width: 80px; border-width: 3px; border-color: #000000"})
-
+                                                                                   Style = Some style})
+                                                                               
     let Main () =
         let MainForm =
             frm.Run(fun _ -> ())
@@ -137,3 +139,21 @@ module Client =
 
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

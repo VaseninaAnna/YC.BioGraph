@@ -31,6 +31,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "YC.BioGraph", "src\YC.BioGraph\YC.BioGraph.fsproj", "{C3EF0949-AA1C-41C2-BF83-338C0B63FEB2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC07FC12-662D-4125-9541-362E22E7148E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,76 +1,69 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,List,Html,Client,Attr,Tags,T,Enhance,Controls,YC,BioGraph,Client1,Data,FormButtonConfiguration,jQuery;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,FormButtonConfiguration,String,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
     Client:{
-     ChooseDefaultControl:Runtime.Field(function()
+     ChooseDefaultControl:function(defaultData)
      {
-      var _builder_,formlet,formlet1;
+      var _builder_;
       _builder_=Formlet.Do();
-      formlet=_builder_.Delay(function()
+      return _builder_.Delay(function()
       {
-       return _builder_.Bind(Formlet.OfElement(function()
+       var formlet,x,tupledArg,height,width,x1;
+       formlet=Controls.Select(0,defaultData);
+       x=Enhance.WithTextLabel("Choose default",formlet);
+       tupledArg=Client.getFormSize(30,210);
+       height=tupledArg[0];
+       width=tupledArg[1];
+       x1=Client.setFormSize(height,width,"select",x);
+       return _builder_.Bind(Enhance.WithFormContainer(x1),function(_arg1)
        {
-        var arg10;
-        arg10=List.ofArray([Attr.Attr().NewAttr("type","button"),Attr.Attr().NewAttr("value","Choose default"),Attr.Attr().NewAttr("style","color: #000000")]);
-        return Tags.Tags().NewTag("input",arg10);
-       }),function(_arg1)
-       {
-        return _builder_.Bind(Formlet.OfElement(function()
-        {
-         var arg10;
-         arg10=Runtime.New(T,{
-          $:0
-         });
-         return Tags.Tags().NewTag("select",arg10);
-        }),function(_arg2)
-        {
-         return _builder_.Return([_arg1,_arg2]);
-        });
+        return _builder_.Return(_arg1);
        });
       });
-      formlet1=Formlet.Horizontal(formlet);
-      return Enhance.WithFormContainer(formlet1);
-     }),
+     },
      FileControl:Runtime.Field(function()
      {
       return Formlet.OfElement(function()
       {
        var arg10;
-       arg10=List.ofArray([Attr.Attr().NewAttr("type","file"),Attr.Attr().NewAttr("lang","en")]);
+       arg10=List.ofArray([Attr.Attr().NewAttr("type","file")]);
        return Tags.Tags().NewTag("input",arg10);
       });
      }),
-     InputControl:function(lbl)
+     InputControl:function(lbl,defaultData)
      {
-      var _builder_,formlet,formlet4;
+      var _builder_,formlet,formlet3;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var formlet1,formlet2,formlet3;
+       var formlet1,formlet2,x,tupledArg,height,width;
        formlet1=Controls.TextArea("");
        formlet2=Enhance.WithTextLabel(lbl,formlet1);
-       formlet3=Enhance.WithLabelAbove(formlet2);
-       return _builder_.Bind(Client1.setFormSize("100px","500px","textarea",formlet3),function(_arg1)
+       x=Enhance.WithLabelAbove(formlet2);
+       tupledArg=Client.getFormSize(85,500);
+       height=tupledArg[0];
+       width=tupledArg[1];
+       return _builder_.Bind(Client.setFormSize(height,width,"textarea",x),function(_arg1)
        {
-        return _builder_.Bind(Client1.FileControl(),function(_arg2)
+        return _builder_.Bind(Client.FileControl(),function(_arg2)
         {
-         return _builder_.Bind(Client1.ChooseDefaultControl(),function(_arg3)
+         return _builder_.Bind(Client.ChooseDefaultControl(defaultData),function(_arg3)
          {
           return _builder_.Return([_arg1,_arg2,_arg3]);
          });
         });
        });
       });
-      formlet4=Formlet.Vertical(formlet);
-      return Enhance.WithFormContainer(formlet4);
+      formlet3=Formlet.Vertical(formlet);
+      return Enhance.WithFormContainer(formlet3);
      },
      Main:function()
      {
       var arg10;
-      arg10=List.ofArray([Client1.frm().Run(function()
+      arg10=List.ofArray([Client.frm().Run(function()
       {
        return null;
       })]);
@@ -82,16 +75,19 @@
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var formlet1,formlet2,formlet3;
+       var formlet1,formlet2,x,tupledArg,height,width;
        formlet1=Controls.ReadOnlyTextArea("");
        formlet2=Enhance.WithTextLabel("Output",formlet1);
-       formlet3=Enhance.WithLabelAbove(formlet2);
-       return _builder_.Bind(Client1.setFormSize("220px","600px","textarea",formlet3),function(_arg1)
+       x=Enhance.WithLabelAbove(formlet2);
+       tupledArg=Client.getFormSize(85,500);
+       height=tupledArg[0];
+       width=tupledArg[1];
+       return _builder_.Bind(Client.setFormSize(height,width,"textarea",x),function(_arg1)
        {
-        var formlet4,formlet5;
-        formlet4=Controls.Checkbox(false);
-        formlet5=Enhance.WithTextLabel("wrap",formlet4);
-        return _builder_.Bind(Enhance.WithLabelLeft(formlet5),function(_arg2)
+        var formlet3,formlet4;
+        formlet3=Controls.Checkbox(false);
+        formlet4=Enhance.WithTextLabel("wrap",formlet3);
+        return _builder_.Bind(Enhance.WithLabelLeft(formlet4),function(_arg2)
         {
          return _builder_.Return([_arg2,_arg1]);
         });
@@ -101,38 +97,43 @@
      }),
      RangeControl:Runtime.Field(function()
      {
-      var _builder_,formlet,formlet5,formlet6,formlet7;
+      var _builder_,formlet,formlet3,formlet4,formlet5;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var formlet1,x,formlet2;
-       formlet1=Controls.Input("1");
+       var formlet1,x,tupledArg,height,width;
+       formlet1=Controls.Input("");
        x=Enhance.WithTextLabel("from",formlet1);
-       formlet2=(Data.Validator().IsInt("Enter numericr value"))(x);
-       return _builder_.Bind(Client1.setFormSize("30px","210px","input",formlet2),function(_arg1)
+       tupledArg=Client.getFormSize(30,210);
+       height=tupledArg[0];
+       width=tupledArg[1];
+       return _builder_.Bind(Client.setFormSize(height,width,"input",x),function(_arg1)
        {
-        var formlet3,x1,formlet4;
-        formlet3=Controls.Input("5");
-        x1=Enhance.WithTextLabel("to",formlet3);
-        formlet4=(Data.Validator().IsInt("Enter numericr value"))(x1);
-        return _builder_.Bind(Client1.setFormSize("30px","210px","input",formlet4),function(_arg2)
+        var formlet2,x1,tupledArg1,height1,width1;
+        formlet2=Controls.Input("");
+        x1=Enhance.WithTextLabel("to",formlet2);
+        tupledArg1=Client.getFormSize(30,210);
+        height1=tupledArg1[0];
+        width1=tupledArg1[1];
+        return _builder_.Bind(Client.setFormSize(height1,width1,"input",x1),function(_arg2)
         {
          return _builder_.Return([_arg1<<0,_arg2<<0]);
         });
        });
       });
-      formlet5=Formlet.Horizontal(formlet);
-      formlet6=Enhance.WithTextLabel("String range",formlet5);
-      formlet7=Enhance.WithLabelAbove(formlet6);
-      return Enhance.WithFormContainer(formlet7);
+      formlet3=Formlet.Horizontal(formlet);
+      formlet4=Enhance.WithTextLabel("String range",formlet3);
+      formlet5=Enhance.WithLabelAbove(formlet4);
+      return Enhance.WithFormContainer(formlet5);
      }),
      ShowImageControl:Runtime.Field(function()
      {
       var formlet,formlet1,formlet2;
       formlet=Formlet.OfElement(function()
       {
-       var arg10;
-       arg10=List.ofArray([Attr.Attr().NewAttr("style","height: 220px; width: 330px"),Attr.Attr().NewAttr("src","graph(kindof).jpg"),Attr.Attr().NewAttr("border","4px")]);
+       var hw,arg10;
+       hw="height: "+(Client.getFormSize(315,315))[0]+"; width: "+(Client.getFormSize(315,315))[0];
+       arg10=List.ofArray([Attr.Attr().NewAttr("style",hw),Attr.Attr().NewAttr("src","graph(kindof).jpg")]);
        return Tags.Tags().NewTag("img",arg10);
       });
       formlet1=Enhance.WithTextLabel("Graph visualisation",formlet);
@@ -141,15 +142,15 @@
      }),
      frm:Runtime.Field(function()
      {
-      var _builder_,formlet,InputForm,_builder_1,formlet4,OutputForm,_builder_2,formlet5,x,inputRecord,buttonConf;
+      var _builder_,formlet,InputForm,_builder_1,formlet4,OutputForm,style,_builder_2,formlet5,x,inputRecord,buttonConf;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       return _builder_.Bind(Client1.InputControl("Grammar"),function(_arg1)
+       return _builder_.Bind(Client.InputControl("Grammar",List.ofArray([["Grammar 1",""],["Grammar 2",""],["Grammar 3",""]])),function(_arg1)
        {
-        return _builder_.Bind(Client1.InputControl("Graph"),function(_arg2)
+        return _builder_.Bind(Client.InputControl("Graph",List.ofArray([["Graph 1",""],["Graph 2",""],["Graph 3",""]])),function(_arg2)
         {
-         return _builder_.Bind(Client1.RangeControl(),function(_arg3)
+         return _builder_.Bind(Client.RangeControl(),function(_arg3)
          {
           var formlet1,formlet2,formlet3;
           formlet1=Controls.Checkbox(false);
@@ -167,15 +168,16 @@
       _builder_1=Formlet.Do();
       formlet4=_builder_1.Delay(function()
       {
-       return _builder_1.Bind(Client1.ShowImageControl(),function(_arg5)
+       return _builder_1.Bind(Client.ShowImageControl(),function(_arg5)
        {
-        return _builder_1.Bind(Client1.OutputControl(),function(_arg6)
+        return _builder_1.Bind(Client.OutputControl(),function(_arg6)
         {
          return _builder_1.Return([_arg5,_arg6]);
         });
        });
       });
       OutputForm=Formlet.Vertical(formlet4);
+      style="background-color: #FF1493; border-width: 3px; border-color: #000000; height: "+(Client.getFormSize(40,80))[0]+"; width: "+(Client.getFormSize(40,80))[1]+"; font-size:"+(Client.getFormSize(30,80))[0];
       _builder_2=Formlet.Do();
       formlet5=_builder_2.Delay(function()
       {
@@ -196,11 +198,26 @@
        },
        Style:{
         $:1,
-        $0:"background-color: #FF1493; font-size: 30px; height: 40px; width: 80px; border-width: 3px; border-color: #000000"
+        $0:style
        },
        Class:inputRecord.Class
       });
       return Enhance.WithCustomSubmitButton(buttonConf,x);
+     }),
+     getFormSize:function(height,width)
+     {
+      var copyOfStruct,copyOfStruct1;
+      copyOfStruct=height*Client.screenHeight()/648>>0;
+      copyOfStruct1=width*Client.screenWidth()/1366>>0;
+      return[String(copyOfStruct)+"px",String(copyOfStruct1)+"px"];
+     },
+     screenHeight:Runtime.Field(function()
+     {
+      return jQuery("html").height();
+     }),
+     screenWidth:Runtime.Field(function()
+     {
+      return jQuery("html").width();
      }),
      setFormSize:function(height,width,formletType,formlet)
      {
@@ -220,29 +237,29 @@
  {
   Formlets=Runtime.Safe(Global.WebSharper.Formlets);
   Formlet=Runtime.Safe(Formlets.Formlet);
-  List=Runtime.Safe(Global.WebSharper.List);
-  Html=Runtime.Safe(Global.WebSharper.Html);
-  Client=Runtime.Safe(Html.Client);
-  Attr=Runtime.Safe(Client.Attr);
-  Tags=Runtime.Safe(Client.Tags);
-  T=Runtime.Safe(List.T);
-  Enhance=Runtime.Safe(Formlets.Enhance);
   Controls=Runtime.Safe(Formlets.Controls);
+  Enhance=Runtime.Safe(Formlets.Enhance);
   YC=Runtime.Safe(Global.YC);
   BioGraph=Runtime.Safe(YC.BioGraph);
-  Client1=Runtime.Safe(BioGraph.Client);
-  Data=Runtime.Safe(Formlets.Data);
+  Client=Runtime.Safe(BioGraph.Client);
+  List=Runtime.Safe(Global.WebSharper.List);
+  Html=Runtime.Safe(Global.WebSharper.Html);
+  Client1=Runtime.Safe(Html.Client);
+  Attr=Runtime.Safe(Client1.Attr);
+  Tags=Runtime.Safe(Client1.Tags);
   FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
+  String=Runtime.Safe(Global.String);
   return jQuery=Runtime.Safe(Global.jQuery);
  });
  Runtime.OnLoad(function()
  {
-  Client1.frm();
-  Client1.ShowImageControl();
-  Client1.RangeControl();
-  Client1.OutputControl();
-  Client1.FileControl();
-  Client1.ChooseDefaultControl();
+  Client.screenWidth();
+  Client.screenHeight();
+  Client.frm();
+  Client.ShowImageControl();
+  Client.RangeControl();
+  Client.OutputControl();
+  Client.FileControl();
   return;
  });
 }());
