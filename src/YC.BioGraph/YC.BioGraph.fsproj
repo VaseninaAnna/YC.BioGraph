@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>YC.BioGraph</RootNamespace>
     <AssemblyName>YC.BioGraph</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <TargetFSharpCoreVersion>4.3.0.0</TargetFSharpCoreVersion>
     <Name>YC.BioGraph</Name>
     <TargetFrameworkProfile />
@@ -116,6 +116,7 @@
     <None Include="paket.template" />
     <Content Include="App.config" />
     <Compile Include="AssemblyInfo.fs" />
+    <Compile Include="Parser.fs" />
     <Compile Include="Remoting.fs" />
     <Compile Include="Client.fs" />
     <Compile Include="Main.fs" />
@@ -145,7 +146,6 @@
     <Reference Include="System.Web.DynamicData.dll" />
     <Reference Include="System.Web.Entity.dll" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq.dll" />
     <Reference Include="WebSharper.Formlets">
       <HintPath>..\..\packages\WebSharper.Formlets.3.6.10.78\lib\net40\WebSharper.Formlets.dll</HintPath>
       <Private>True</Private>
@@ -168,6 +168,10 @@
     <Error Condition="!Exists('..\..\packages\WebSharper.3.6.14.237\build\WebSharper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\WebSharper.3.6.14.237\build\WebSharper.targets'))" />
   </Target>
   -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
   <Choose>
     <When Condition="$(TargetFrameworkIdentifier) == '.NETFramework' And $(TargetFrameworkVersion) == 'v3.5'">
       <ItemGroup>

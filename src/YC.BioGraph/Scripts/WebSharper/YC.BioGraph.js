@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,T,Remoting,AjaxRemotingProvider,Data,String,jQuery;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,T,Remoting,AjaxRemotingProvider,Data,FormButtonConfiguration,String,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
@@ -53,7 +53,7 @@
         {
          return _builder_1.ReturnFrom(Client.ChooseDefaultControl(Runtime.New(T,{
           $:1,
-          $0:["default",_arg1],
+          $0:["",_arg1],
           $1:defaultData
          })));
         });
@@ -126,9 +126,16 @@
      },
      RangeControl:Runtime.Field(function()
      {
-      var _builder_,formlet,formlet3,formlet4,formlet5;
+      var formlet,_builder_,_builder_1,formlet2,formlet3,formlet4;
       _builder_=Formlet.Do();
-      formlet=_builder_.Delay(function()
+      _builder_1=Formlet.Do();
+      formlet=Data.$(Data.$(Formlet.Return(function(min)
+      {
+       return function(max)
+       {
+        return[min<<0,max<<0];
+       };
+      }),_builder_.Delay(function()
       {
        var formlet1,x,tupledArg,height,width;
        formlet1=Controls.Input("");
@@ -138,22 +145,25 @@
        width=tupledArg[1];
        return _builder_.Bind(Client.setFormSize(height,width,"input",x),function(_arg1)
        {
-        var formlet2,x1,tupledArg1,height1,width1;
-        formlet2=Controls.Input("");
-        x1=Enhance.WithTextLabel("to",formlet2);
-        tupledArg1=Client.getFormSize(30,210);
-        height1=tupledArg1[0];
-        width1=tupledArg1[1];
-        return _builder_.Bind(Client.setFormSize(height1,width1,"input",x1),function(_arg2)
-        {
-         return _builder_.Return([_arg1<<0,_arg2<<0]);
-        });
+        return _builder_.Return(_arg1);
        });
-      });
-      formlet3=Formlet.Horizontal(formlet);
-      formlet4=Enhance.WithTextLabel("String range",formlet3);
-      formlet5=Enhance.WithLabelAbove(formlet4);
-      return Enhance.WithFormContainer(formlet5);
+      })),_builder_1.Delay(function()
+      {
+       var formlet1,x,tupledArg,height,width;
+       formlet1=Controls.Input("");
+       x=Enhance.WithTextLabel("to",formlet1);
+       tupledArg=Client.getFormSize(30,210);
+       height=tupledArg[0];
+       width=tupledArg[1];
+       return _builder_1.Bind(Client.setFormSize(height,width,"input",x),function(_arg2)
+       {
+        return _builder_1.Return(_arg2);
+       });
+      }));
+      formlet2=Formlet.Horizontal(formlet);
+      formlet3=Enhance.WithTextLabel("String range",formlet2);
+      formlet4=Enhance.WithLabelAbove(formlet3);
+      return Enhance.WithFormContainer(formlet4);
      }),
      ShowImageControl:Runtime.Field(function()
      {
@@ -171,7 +181,7 @@
      }),
      frm:Runtime.Field(function()
      {
-      var formlet,mapping,list,mapping1,list1,formlet1,formlet2,formlet3,InputForm,OutputForm,_builder_1,formlet5,formlet6;
+      var formlet,mapping,list,mapping1,list1,formlet1,formlet2,formlet3,InputForm,OutputForm,style,_builder_1,formlet5,x1,inputRecord,buttonConf;
       mapping=function(grmName)
       {
        return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:2",[{
@@ -228,7 +238,7 @@
        });
        return Formlet.Vertical(formlet4);
       };
-      "background-color: #FF1493; border-width: 3px; border-color: #000000; height: "+(Client.getFormSize(40,80))[0]+"; width: "+(Client.getFormSize(40,80))[1]+"; font-size:"+(Client.getFormSize(30,80))[0];
+      style="background-color: #FF1493; border-width: 3px; border-color: #000000; height: "+(Client.getFormSize(40,80))[0]+"; width: "+(Client.getFormSize(40,80))[1]+"; font-size:"+(Client.getFormSize(30,80))[0];
       _builder_1=Formlet.Do();
       formlet5=_builder_1.Delay(function()
       {
@@ -240,8 +250,20 @@
         });
        });
       });
-      formlet6=Formlet.Horizontal(formlet5);
-      return Enhance.WithSubmitAndResetButtons(formlet6);
+      x1=Formlet.Horizontal(formlet5);
+      inputRecord=FormButtonConfiguration.get_Default();
+      buttonConf=Runtime.New(FormButtonConfiguration,{
+       Label:{
+        $:1,
+        $0:"GO"
+       },
+       Style:{
+        $:1,
+        $0:style
+       },
+       Class:inputRecord.Class
+      });
+      return Enhance.WithCustomSubmitButton(buttonConf,x1);
      }),
      getFormSize:function(height,width)
      {
@@ -290,6 +312,7 @@
   Remoting=Runtime.Safe(Global.WebSharper.Remoting);
   AjaxRemotingProvider=Runtime.Safe(Remoting.AjaxRemotingProvider);
   Data=Runtime.Safe(Formlets.Data);
+  FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
   String=Runtime.Safe(Global.String);
   return jQuery=Runtime.Safe(Global.jQuery);
  });

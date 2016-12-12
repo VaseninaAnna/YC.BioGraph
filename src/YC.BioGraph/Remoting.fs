@@ -65,5 +65,8 @@ module Server =
 
     [<Rpc>]
     let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
-        if grammar = "" then Error "!!?"
-        else Error grammar
+        if grammar = "" || graph = "" || range = (0, 0) then Error "!!?"
+        else
+            match Parser.build() with
+            | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
+            | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (string tree)

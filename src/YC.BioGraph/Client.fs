@@ -51,7 +51,7 @@ module Client =
         wsff.Do {
             let! defaultValue = (wsff.Do {
                     let! fileInput = FileControl
-                    return! ChooseDefaultControl (("default", fileInput) :: defaultData)
+                    return! ChooseDefaultControl (("", fileInput) :: defaultData)
                 })
             let! textInput =
                     wsfc.TextArea defaultValue              
@@ -66,17 +66,21 @@ module Client =
         |> wsfe.WithFormContainer
 
     let RangeControl =
-        wsff.Do {                
+        (wsff.Yield (fun min max -> (int min, int max))
+        <*> wsff.Do {                
             let! min = 
                 wsfc.Input ""
                 |> wsfe.WithTextLabel "from" 
                 |> setFormSize (getFormSize 30 210) "input"
+            return min
+        }
+        <*> wsff.Do {                
             let! max  = 
                 wsfc.Input "" 
                 |> wsfe.WithTextLabel "to" 
                 |> setFormSize (getFormSize 30 210) "input"      
-            return (int min, int max)
-        }
+            return max
+        })
         |> wsff.Horizontal 
         |> wsfe.WithTextLabel "String range"
         |> wsfe.WithLabelAbove 
@@ -145,10 +149,9 @@ module Client =
             return (x, y)
         }
         |> wsff.Horizontal
-        //|> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-        //                                                                           Label = Some "GO" 
-        //                                                                           Style = Some style})
-        |> wsfe.WithSubmitAndResetButtons
+        |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
+                                                                                   Label = Some "GO" 
+                                                                                   Style = Some style})
                                                                                
     let Main () =
         let MainForm =
