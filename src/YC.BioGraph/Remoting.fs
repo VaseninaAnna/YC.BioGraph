@@ -65,4 +65,5 @@ module Server =
 
     [<Rpc>]
     let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
-        Error "!!?"
+        if grammar = "" then Error "!!?"
+        else Error grammar

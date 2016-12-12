@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,Remoting,AjaxRemotingProvider,FormButtonConfiguration,String,jQuery;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,List,Html,Client1,Attr,Tags,T,Remoting,AjaxRemotingProvider,Data,String,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
@@ -26,39 +26,55 @@
      },
      FileControl:Runtime.Field(function()
      {
-      return Formlet.OfElement(function()
+      var f,formlet;
+      f=function()
+      {
+       return"";
+      };
+      formlet=Formlet.OfElement(function()
       {
        var arg10;
        arg10=List.ofArray([Attr.Attr().NewAttr("type","file")]);
        return Tags.Tags().NewTag("input",arg10);
       });
+      return Formlet.Map(f,formlet);
      }),
      InputControl:function(lbl,defaultData)
      {
-      var _builder_,formlet,formlet3;
+      var _builder_,formlet,formlet3,formlet4;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var formlet1,formlet2,x,tupledArg,height,width;
-       formlet1=Controls.TextArea("");
-       formlet2=Enhance.WithTextLabel(lbl,formlet1);
-       x=Enhance.WithLabelAbove(formlet2);
-       tupledArg=Client.getFormSize(85,500);
-       height=tupledArg[0];
-       width=tupledArg[1];
-       return _builder_.Bind(Client.setFormSize(height,width,"textarea",x),function(_arg1)
+       var _builder_1;
+       _builder_1=Formlet.Do();
+       return _builder_.Bind(_builder_1.Delay(function()
        {
-        return _builder_.Bind(Client.FileControl(),function(_arg2)
+        return _builder_1.Bind(Client.FileControl(),function(_arg1)
         {
-         return _builder_.Bind(Client.ChooseDefaultControl(defaultData),function(_arg3)
-         {
-          return _builder_.Return([_arg1,_arg2,_arg3]);
-         });
+         return _builder_1.ReturnFrom(Client.ChooseDefaultControl(Runtime.New(T,{
+          $:1,
+          $0:["default",_arg1],
+          $1:defaultData
+         })));
+        });
+       }),function(_arg2)
+       {
+        var formlet1,formlet2,x,tupledArg,height,width;
+        formlet1=Controls.TextArea(_arg2);
+        formlet2=Enhance.WithTextLabel(lbl,formlet1);
+        x=Enhance.WithLabelAbove(formlet2);
+        tupledArg=Client.getFormSize(85,500);
+        height=tupledArg[0];
+        width=tupledArg[1];
+        return _builder_.Bind(Client.setFormSize(height,width,"textarea",x),function(_arg3)
+        {
+         return _builder_.Return(_arg3);
         });
        });
       });
-      formlet3=Formlet.Vertical(formlet);
-      return Enhance.WithFormContainer(formlet3);
+      formlet3=Formlet.FlipBody(formlet);
+      formlet4=Formlet.Vertical(formlet3);
+      return Enhance.WithFormContainer(formlet4);
      },
      Main:function()
      {
@@ -69,14 +85,27 @@
       })]);
       return Tags.Tags().NewTag("div",arg10);
      },
-     OutputControl:Runtime.Field(function()
+     OutputControl:function(grm,graph,rng,isC)
      {
       var _builder_,formlet;
       _builder_=Formlet.Do();
       formlet=_builder_.Delay(function()
       {
-       var formlet1,formlet2,x,tupledArg,height,width;
-       formlet1=Controls.ReadOnlyTextArea("");
+       var _arg20_,_arg21_,matchValue,text,_,txt,formlet1,formlet2,x,tupledArg,height,width;
+       _arg20_=rng[0];
+       _arg21_=rng[1];
+       matchValue=AjaxRemotingProvider.Sync("YC.BioGraph:3",[grm,graph,_arg20_,_arg21_,isC]);
+       if(matchValue.$==0)
+        {
+         txt=matchValue.$0;
+         _=txt;
+        }
+       else
+        {
+         _="oK";
+        }
+       text=_;
+       formlet1=Controls.ReadOnlyTextArea(text);
        formlet2=Enhance.WithTextLabel("Output",formlet1);
        x=Enhance.WithLabelAbove(formlet2);
        tupledArg=Client.getFormSize(85,500);
@@ -87,14 +116,14 @@
         var formlet3,formlet4;
         formlet3=Controls.Checkbox(false);
         formlet4=Enhance.WithTextLabel("wrap",formlet3);
-        return _builder_.Bind(Enhance.WithLabelLeft(formlet4),function(_arg2)
+        return _builder_.Bind(Enhance.WithLabelLeft(formlet4),function()
         {
-         return _builder_.Return([_arg2,_arg1]);
+         return _builder_.Return(_arg1);
         });
        });
       });
       return Enhance.WithFormContainer(formlet);
-     }),
+     },
      RangeControl:Runtime.Field(function()
      {
       var _builder_,formlet,formlet3,formlet4,formlet5;
@@ -142,83 +171,77 @@
      }),
      frm:Runtime.Field(function()
      {
-      var _builder_,formlet,InputForm,_builder_1,formlet4,OutputForm,style,_builder_2,formlet5,x,inputRecord,buttonConf;
-      _builder_=Formlet.Do();
-      formlet=_builder_.Delay(function()
+      var formlet,mapping,list,mapping1,list1,formlet1,formlet2,formlet3,InputForm,OutputForm,_builder_1,formlet5,formlet6;
+      mapping=function(grmName)
       {
-       var mapping,list;
-       mapping=function(grmName)
-       {
-        return[grmName,""];
-       };
-       list=AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
+       return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:2",[{
         $:1
-       }]);
-       return _builder_.Bind(Client.InputControl("Grammar",List.map(mapping,list)),function(_arg1)
+       },grmName])];
+      };
+      list=AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
+       $:1
+      }]);
+      mapping1=function(grmName)
+      {
+       return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:2",[{
+        $:0
+       },grmName])];
+      };
+      list1=AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
+       $:0
+      }]);
+      formlet1=Controls.Checkbox(false);
+      formlet2=Enhance.WithTextLabel("DRAW GRAPH",formlet1);
+      formlet3=Enhance.WithLabelLeft(formlet2);
+      formlet=Data.$(Data.$(Data.$(Data.$(Formlet.Return(function(grm)
+      {
+       return function(graph)
        {
-        var mapping1,list1;
-        mapping1=function(grmName)
+        return function(rng)
         {
-         return[grmName,""];
-        };
-        list1=AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
-         $:0
-        }]);
-        return _builder_.Bind(Client.InputControl("Graph",List.map(mapping1,list1)),function(_arg2)
-        {
-         return _builder_.Bind(Client.RangeControl(),function(_arg3)
+         return function(isC)
          {
-          var formlet1,formlet2,formlet3;
-          formlet1=Controls.Checkbox(false);
-          formlet2=Enhance.WithTextLabel("DRAW GRAPH",formlet1);
-          formlet3=Enhance.WithLabelLeft(formlet2);
-          return _builder_.Bind(Enhance.WithFormContainer(formlet3),function(_arg4)
-          {
-           return _builder_.Return([_arg1,_arg2,_arg3,_arg4]);
-          });
+          return[grm,graph,rng,isC];
+         };
+        };
+       };
+      }),Client.InputControl("Grammar",List.map(mapping,list))),Client.InputControl("Graph",List.map(mapping1,list1))),Client.RangeControl()),Enhance.WithFormContainer(formlet3));
+      InputForm=Formlet.Vertical(formlet);
+      OutputForm=function(x)
+      {
+       var _builder_,formlet4;
+       _builder_=Formlet.Do();
+       formlet4=_builder_.Delay(function()
+       {
+        return _builder_.Bind(Client.ShowImageControl(),function(_arg1)
+        {
+         var grm,graph,rng,isC;
+         grm=x[0];
+         graph=x[1];
+         rng=x[2];
+         isC=x[3];
+         return _builder_.Bind(Client.OutputControl(grm,graph,rng,isC),function(_arg2)
+         {
+          return _builder_.Return([_arg1,_arg2]);
          });
         });
        });
-      });
-      InputForm=Formlet.Vertical(formlet);
+       return Formlet.Vertical(formlet4);
+      };
+      "background-color: #FF1493; border-width: 3px; border-color: #000000; height: "+(Client.getFormSize(40,80))[0]+"; width: "+(Client.getFormSize(40,80))[1]+"; font-size:"+(Client.getFormSize(30,80))[0];
       _builder_1=Formlet.Do();
-      formlet4=_builder_1.Delay(function()
+      formlet5=_builder_1.Delay(function()
       {
-       return _builder_1.Bind(Client.ShowImageControl(),function(_arg5)
+       return _builder_1.Bind(InputForm,function(_arg3)
        {
-        return _builder_1.Bind(Client.OutputControl(),function(_arg6)
+        return _builder_1.Bind(OutputForm(_arg3),function(_arg4)
         {
-         return _builder_1.Return([_arg5,_arg6]);
+         return _builder_1.Return([_arg3,_arg4]);
         });
        });
       });
-      OutputForm=Formlet.Vertical(formlet4);
-      style="background-color: #FF1493; border-width: 3px; border-color: #000000; height: "+(Client.getFormSize(40,80))[0]+"; width: "+(Client.getFormSize(40,80))[1]+"; font-size:"+(Client.getFormSize(30,80))[0];
-      _builder_2=Formlet.Do();
-      formlet5=_builder_2.Delay(function()
-      {
-       return _builder_2.Bind(InputForm,function(_arg7)
-       {
-        return _builder_2.Bind(OutputForm,function(_arg8)
-        {
-         return _builder_2.Return([_arg7,_arg8]);
-        });
-       });
-      });
-      x=Formlet.Horizontal(formlet5);
-      inputRecord=FormButtonConfiguration.get_Default();
-      buttonConf=Runtime.New(FormButtonConfiguration,{
-       Label:{
-        $:1,
-        $0:"GO"
-       },
-       Style:{
-        $:1,
-        $0:style
-       },
-       Class:inputRecord.Class
-      });
-      return Enhance.WithCustomSubmitButton(buttonConf,x);
+      formlet6=Formlet.Horizontal(formlet5);
+      return Enhance.WithSubmitAndResetButtons(formlet6);
      }),
      getFormSize:function(height,width)
      {
@@ -263,9 +286,10 @@
   Client1=Runtime.Safe(Html.Client);
   Attr=Runtime.Safe(Client1.Attr);
   Tags=Runtime.Safe(Client1.Tags);
+  T=Runtime.Safe(List.T);
   Remoting=Runtime.Safe(Global.WebSharper.Remoting);
   AjaxRemotingProvider=Runtime.Safe(Remoting.AjaxRemotingProvider);
-  FormButtonConfiguration=Runtime.Safe(Enhance.FormButtonConfiguration);
+  Data=Runtime.Safe(Formlets.Data);
   String=Runtime.Safe(Global.String);
   return jQuery=Runtime.Safe(Global.jQuery);
  });
@@ -276,7 +300,6 @@
   Client.frm();
   Client.ShowImageControl();
   Client.RangeControl();
-  Client.OutputControl();
   Client.FileControl();
   return;
  });

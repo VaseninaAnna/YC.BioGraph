@@ -1,5 +1,6 @@
 namespace YC.BioGraph
 
+open WebSharper.Formlets
 
 open WebSharper
 open WebSharper.JavaScript
@@ -11,7 +12,6 @@ module wsfe = WebSharper.Formlets.Enhance
 module wsfd = WebSharper.Formlets.Data
 module wsff = WebSharper.Formlets.Formlet
 module wsfl = WebSharper.Formlets.Layout
-
 
 
 [<JavaScript>]
@@ -38,25 +38,30 @@ module Client =
                 |> wsfe.WithTextLabel "Choose default"
                 |> setFormSize (getFormSize 30 210) "select" 
                 |> wsfe.WithFormContainer     
-            return (dataSelect)
-            }  
+            return dataSelect
+       }
 
     let FileControl = 
         wsff.OfElement (fun () ->
             Input [Attr.Type "file"] 
         )
+        |> wsff.Map (fun () -> "")
     
     let InputControl lbl defaultData =
         wsff.Do {
+            let! defaultValue = (wsff.Do {
+                    let! fileInput = FileControl
+                    return! ChooseDefaultControl (("default", fileInput) :: defaultData)
+                })
             let! textInput =
-                wsfc.TextArea ""              
-                |> wsfe.WithTextLabel lbl
-                |> wsfe.WithLabelAbove
-                |> setFormSize (getFormSize 85 500) "textarea"
-            let! fileInput = FileControl
-            let! defaultSelect = ChooseDefaultControl defaultData
-            return (textInput, fileInput, defaultSelect)             
+                    wsfc.TextArea defaultValue              
+                    |> wsfe.WithTextLabel lbl
+                    |> wsfe.WithLabelAbove
+                    |> setFormSize (getFormSize 85 500) "textarea"
+            
+            return (textInput)//, fileInput, defaultSelect)
         }
+        |> wsff.FlipBody
         |> wsff.Vertical
         |> wsfe.WithFormContainer
 
@@ -77,17 +82,26 @@ module Client =
         |> wsfe.WithLabelAbove 
         |> wsfe.WithFormContainer 
 
-    let OutputControl = 
-        wsff.Do {
-            let! output =
-                wsfc.ReadOnlyTextArea "" 
-                |> wsfe.WithTextLabel "Output"
-                |> wsfe.WithLabelAbove                  
-                |> setFormSize (getFormSize 85 500) "textarea"
-            let! wrapCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "wrap" |> wsfe.WithLabelLeft
-            return (wrapCheckbox, output)
-        }
-        |> wsfe.WithFormContainer
+    let OutputControl (grm: string, graph: string, rng: int * int, isC: bool) =
+        wsff.Do
+            {
+                let text =
+                    match Server.Parse grm graph rng isC with
+                    | Server.Result.Error txt -> txt
+                    | _ -> "oK"
+
+                let! output =
+                    wsfc.ReadOnlyTextArea text
+                    |> wsfe.WithTextLabel "Output"
+                    |> wsfe.WithLabelAbove
+                    |> setFormSize (getFormSize 85 500) "textarea"
+            
+                let! wrapCheckbox = wsfc.Checkbox false |> wsfe.WithTextLabel "wrap" |> wsfe.WithLabelLeft
+                
+                return output
+            }
+            |> wsfe.WithFormContainer
+        
     
     let ShowImageControl = 
        wsff.OfElement (fun () ->
@@ -99,39 +113,46 @@ module Client =
        |> wsfe.WithFormContainer     
 
     let frm =   
-         
         let InputForm  =
+            (*
             wsff.Do {                
-                let! grammar = InputControl "Grammar" (Server.LoadDefaultFileNames Server.FileType.Grammar |> List.map (fun grmName -> grmName, ""))
-                let! graph = InputControl "Graph" (Server.LoadDefaultFileNames Server.FileType.Graph |> List.map (fun grmName -> grmName, ""))
+                let! grammar = InputControl "Grammar" (Server.LoadDefaultFileNames Server.FileType.Grammar |> List.map (fun grmName -> grmName, Server.LoadDefaultFile Server.FileType.Grammar grmName))
+                let! graph = InputControl "Graph" (Server.LoadDefaultFileNames Server.FileType.Graph |> List.map (fun grmName -> grmName, Server.LoadDefaultFile Server.FileType.Graph grmName))
                 let! range = RangeControl
                 let! checkbox = wsfc.Checkbox false |> wsfe.WithTextLabel "DRAW GRAPH" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer
                 return (grammar, graph, range, checkbox)
-            }
+            }*)
+            (wsff.Yield (fun (grm: string) (graph: string) (rng: int * int) (isC: bool) -> (grm, graph, rng, isC))
+            <*> (InputControl "Grammar" (Server.LoadDefaultFileNames Server.FileType.Grammar |> List.map (fun grmName -> grmName, Server.LoadDefaultFile Server.FileType.Grammar grmName)))
+            <*> (InputControl "Graph" (Server.LoadDefaultFileNames Server.FileType.Graph |> List.map (fun grmName -> grmName, Server.LoadDefaultFile Server.FileType.Graph grmName)))
+            <*> RangeControl
+            <*> (wsfc.Checkbox false |> wsfe.WithTextLabel "DRAW GRAPH" |> wsfe.WithLabelLeft |> wsfe.WithFormContainer))
             |> wsff.Vertical
 
-        let OutputForm =
+        let OutputForm x =
             wsff.Do {
                 let! picture = ShowImageControl
-                let! output = OutputControl 
+                let! output = OutputControl x
                 return (picture, output)
             }
             |> wsff.Vertical 
         
         let style = "background-color: #FF1493; border-width: 3px; border-color: #000000; height: " + fst(getFormSize 40 80) + "; width: " + snd(getFormSize 40 80) + "; font-size:" +  fst(getFormSize 30 80); 
+
         wsff.Do {
             let! x = InputForm
-            let! y = OutputForm
+            let! y = OutputForm x
             return (x, y)
         }
         |> wsff.Horizontal
-        |> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
-                                                                                   Label = Some "GO" 
-                                                                                   Style = Some style})
+        //|> wsfe.WithCustomSubmitButton ({ wsfe.FormButtonConfiguration.Default with 
+        //                                                                           Label = Some "GO" 
+        //                                                                           Style = Some style})
+        |> wsfe.WithSubmitAndResetButtons
                                                                                
     let Main () =
         let MainForm =
-            frm.Run(fun _ -> ())
+            frm.Run(fun (a, ((), b)) -> ())
         
         Div [      
            MainForm
