@@ -40,13 +40,11 @@ module Server =
         match fileType with
         | Grammar ->
             [
-                "A"
-                "B"
+                "lite"
             ]
         | Graph ->
             [
-                "A"
-                "B"
+                "lite"
             ]
 
     [<Rpc>]
@@ -54,19 +52,25 @@ module Server =
         match fileType with
         | Grammar ->
             match name with
-            | "A" -> "A grammar value"
-            | "B" -> "B grammar value"
+            | "lite" -> @"[<Start>]
+    s: a b | b c | d
+    a: A
+    b: C
+    c: G
+    d: U"
             |  _  -> ""
         | Graph ->
             match name with
-            | "A" -> "A graph value"
-            | "B" -> "B graph value"
+            | "lite" -> "digraph { 0 -> 1 [label = U]; 1 -> 2 [label = C]}"
             |  _  -> ""
 
     [<Rpc>]
     let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
-        if grammar = "" || graph = "" || range = (0, 0) then Error "!!?"
-        else
-            match Parser.build() with
-            | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
-            | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (string tree)
+        try
+            if grammar = "" || graph = "" || range = (0, 0) then Error "!!?"
+            else
+                match Parser.parse grammar graph with
+                | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
+                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (string tree)
+        with
+        | e -> Error e.Message

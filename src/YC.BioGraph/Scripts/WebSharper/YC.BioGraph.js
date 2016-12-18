@@ -138,7 +138,7 @@
       }),_builder_.Delay(function()
       {
        var formlet1,x,tupledArg,height,width;
-       formlet1=Controls.Input("");
+       formlet1=Controls.ReadOnlyInput("0");
        x=Enhance.WithTextLabel("from",formlet1);
        tupledArg=Client.getFormSize(30,210);
        height=tupledArg[0];
@@ -150,7 +150,7 @@
       })),_builder_1.Delay(function()
       {
        var formlet1,x,tupledArg,height,width;
-       formlet1=Controls.Input("");
+       formlet1=Controls.ReadOnlyInput("0");
        x=Enhance.WithTextLabel("to",formlet1);
        tupledArg=Client.getFormSize(30,210);
        height=tupledArg[0];

@@ -66,21 +66,21 @@ module Client =
         |> wsfe.WithFormContainer
 
     let RangeControl =
-        (wsff.Yield (fun min max -> (int min, int max))
+        wsff.Yield (fun min max -> (int min, int max))
         <*> wsff.Do {                
-            let! min = 
-                wsfc.Input ""
-                |> wsfe.WithTextLabel "from" 
-                |> setFormSize (getFormSize 30 210) "input"
-            return min
-        }
+                let! min = 
+                    wsfc.ReadOnlyInput "0"
+                    |> wsfe.WithTextLabel "from" 
+                    |> setFormSize (getFormSize 30 210) "input"
+                return min
+            }
         <*> wsff.Do {                
-            let! max  = 
-                wsfc.Input "" 
-                |> wsfe.WithTextLabel "to" 
-                |> setFormSize (getFormSize 30 210) "input"      
-            return max
-        })
+                let! max  = 
+                    wsfc.ReadOnlyInput "0"
+                    |> wsfe.WithTextLabel "to" 
+                    |> setFormSize (getFormSize 30 210) "input"      
+                return max
+            }
         |> wsff.Horizontal 
         |> wsfe.WithTextLabel "String range"
         |> wsfe.WithLabelAbove 

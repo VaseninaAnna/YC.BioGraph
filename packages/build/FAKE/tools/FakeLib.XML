@@ -10810,6 +10810,11 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
  Contains a task which allows to run [SpecFlow](http://www.specflow.org/) tests.
 </summary>
 </member>
+<member name="P:Fake.Sql.DacPac.DeployDbArgs.Variables">
+<summary>
+ SQLCMD variables
+</summary>
+</member>
 <member name="P:Fake.Sql.DacPac.DeployDbArgs.AdditionalSqlPackageProperties">
 <summary>
  Additional configuration parameters required by sqlpackage.exe
@@ -12325,6 +12330,56 @@ Partial validation for folder name, based on http://msdn.microsoft.com/en-us/lib
 <member name="T:Fake.TestFlightHelper">
 <summary>
  Contains tasks to upload apps to [TestFlight](http://testflightapp.com)
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.WorkingDirectory">
+<summary>
+ Working directory
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.ListTests">
+<summary>
+ Doesn&apos;t run tests, print out list of tests instead.
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.Run">
+<summary>
+ Run only provided tests.
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.FilterTestList">
+<summary>
+ Filter a specific test list to run.
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.FilterTestCase">
+<summary>
+ Filter a specific test case to run.
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.Filter">
+<summary>
+ Filter a specific hierarchy to run
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.Parallel">
+<summary>
+ Run all tests in parallel. Default is true
+</summary>
+</member>
+<member name="P:Fake.Testing.Expecto.ExpectoParams.Debug">
+<summary>
+ Extra verbose output for your tests
+</summary>
+</member>
+<member name="T:Fake.Testing.Expecto.ExpectoParams">
+<summary>
+ CLI parameters available if you use Tests.runTestsInAssembly defaultConfig argv in your code:
+</summary>
+</member>
+<member name="T:Fake.Testing.Expecto">
+<summary>
+ Contains tasks to run [expecto](https://github.com/haf/expecto) v2 unit tests.
 </summary>
 </member>
 <member name="P:Fake.Testing.NUnit3.NUnit3Params.ErrorLevel">
