@@ -29,6 +29,10 @@ module Server =
         | Success of optGraph: option<Graph> * seqs: string[]
 
     [<Rpc>]
+    let readStream (stream: System.IO.Stream) =
+        System.IO.StreamReader(stream).ReadToEnd()
+
+    [<Rpc>]
     let DoSomething input =
         let R (s: string) = System.String(Array.rev(s.ToCharArray()))
         async {
