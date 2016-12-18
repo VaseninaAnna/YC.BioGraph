@@ -29,6 +29,10 @@ module Server =
         | Success of optGraph: option<Graph> * seqs: string[]
 
     [<Rpc>]
+    let readStream (stream: System.IO.Stream) =
+        System.IO.StreamReader(stream).ReadToEnd()
+
+    [<Rpc>]
     let DoSomething input =
         let R (s: string) = System.String(Array.rev(s.ToCharArray()))
         async {
@@ -67,7 +71,7 @@ module Server =
     [<Rpc>]
     let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
         try
-            if grammar = "" || graph = "" || range = (0, 0) then Error "!!?"
+            if grammar = "" || graph = "" then Error "!!?"
             else
                 match Parser.parse grammar graph with
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
