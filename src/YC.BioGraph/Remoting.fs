@@ -27,17 +27,6 @@ module Server =
     type Result =
         | Error of message: string
         | Success of optGraph: option<Graph> * seqs: string[]
-
-    [<Rpc>]
-    let readStream (stream: System.IO.Stream) =
-        System.IO.StreamReader(stream).ReadToEnd()
-
-    [<Rpc>]
-    let DoSomething input =
-        let R (s: string) = System.String(Array.rev(s.ToCharArray()))
-        async {
-            return R input
-        }
         
     [<Rpc>]
     let LoadDefaultFileNames (fileType: FileType) =
@@ -57,24 +46,29 @@ module Server =
         | Grammar ->
             match name with
             | "lite" -> @"[<Start>]
-    s: a b | b c | d
-    a: A
-    b: C
-    c: G
-    d: U"
+s: a b | b c | d
+a: A
+b: C
+c: G
+d: U"
             |  _  -> ""
         | Graph ->
             match name with
-            | "lite" -> "digraph { 0 -> 1 [label = U]; 1 -> 2 [label = C]}"
+            | "lite" -> @"digraph {
+    0 -> 1 [label = U]
+    1 -> 2 [label = C]
+}"
             |  _  -> ""
 
     [<Rpc>]
     let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
         try
-            if grammar = "" || graph = "" then Error "!!?"
+            if grammar = "" && graph = "" then Error "Empty input"
+            elif graph = "" then Error "Empty graph input"
+            elif grammar = "" then Error "Empty grammar input"
             else
                 match Parser.parse grammar graph with
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
-                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (string tree)
+                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (sprintf "%s" (Parser.dot2tree <| Parser.ast2graph tree))
         with
         | e -> Error e.Message

@@ -208,23 +208,23 @@
       style="background-color: #FF1493; border-width: 3px; border-color: #000000; height: "+(Client.getFormSize(40,80))[0]+"; width: "+(Client.getFormSize(40,80))[1]+"; font-size:"+(Client.getFormSize(30,80))[0];
       mapping=function(grmName)
       {
-       return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:3",[{
+       return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
         $:1
        },grmName])];
       };
-      list=AjaxRemotingProvider.Sync("YC.BioGraph:2",[{
+      list=AjaxRemotingProvider.Sync("YC.BioGraph:0",[{
        $:1
       }]);
       mapping1=function(grmName)
       {
-       return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:3",[{
+       return[grmName,AjaxRemotingProvider.Sync("YC.BioGraph:1",[{
         $:0
        },grmName])];
       };
-      list1=AjaxRemotingProvider.Sync("YC.BioGraph:2",[{
+      list1=AjaxRemotingProvider.Sync("YC.BioGraph:0",[{
        $:0
       }]);
-      formlet=Controls.Checkbox(false);
+      formlet=Controls.ReadOnlyCheckbox(false);
       formlet1=Enhance.WithTextLabel("DRAW GRAPH",formlet);
       formlet2=Enhance.WithLabelLeft(formlet1);
       x=Data.$(Data.$(Data.$(Data.$(Formlet.Return(function(grm)
@@ -267,7 +267,7 @@
         var _arg20_,_arg21_,matchValue,seqs,_,seqs1,txt;
         _arg20_=rng[0];
         _arg21_=rng[1];
-        matchValue=AjaxRemotingProvider.Sync("YC.BioGraph:4",[grm,graph,_arg20_,_arg21_,drawGr]);
+        matchValue=AjaxRemotingProvider.Sync("YC.BioGraph:2",[grm,graph,_arg20_,_arg21_,drawGr]);
         if(matchValue.$==1)
          {
           seqs1=matchValue.$1;
