@@ -7,23 +7,6 @@ module Server =
         | Graph
         | Grammar
 
-    type Nuc = | A | C | G | U
-
-    type Edge = Edge of s:int * t:int * n:Nuc * f:bool
-
-    type t =
-        | Bad
-        | Normal of int
-        | Good of int
-
-    type QEdge = QEdge of s:int * tA:t * tC:t * TG:t * TU:t
-
-    type Graph = {
-        countOfVertex: int;
-        edges: Edge[];
-        qedges: QEdge[];
-    }
-
     type Result =
         | Error of message: string
         | Success of optGraph: option<Graph> * seqs: string[]
@@ -61,14 +44,22 @@ d: U"
             |  _  -> ""
 
     [<Rpc>]
-    let Parse (grammar: string) (graph: string) (range: int * int) (isOutputGraph: bool) =
+    let Parse (grammar'text: string) (graph'text: string) (range: int * int) (isOutputGraph: bool) =
         try
-            if grammar = "" && graph = "" then Error "Empty input"
-            elif graph = "" then Error "Empty graph input"
-            elif grammar = "" then Error "Empty grammar input"
+            if grammar'text = "" && graph'text = "" then Error "Empty input"
+            elif graph'text = "" then Error "Empty graph input"
+            elif grammar'text = "" then Error "Empty grammar input"
             else
+                let grammar, graph = Parser.grmParse grammar'text, Parser.graphParse graph'text
                 match Parser.parse grammar graph with
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
-                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (sprintf "%A" (Parser.f tree))
+                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree ->
+                    let et = Parser.tree2extTree tree
+                    let edgesSeqs = Parser.extTree2edgesSeqs et
+                    let seqs = Parser.edgesSeqs2stringSeqs edgesSeqs graph
+                    if isOutputGraph then
+                        Success (None, seqs)
+                    else
+                        Success (Some <| Parser.markGraph graph (Parser.extTree2edges et), seqs)
         with
         | e -> Error e.Message
