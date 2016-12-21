@@ -23,7 +23,7 @@ module Templating =
             .With("body", fun x -> x.Body)
             .With("about-href", fun x -> x.AboutHRef)
 
-    let Main ctx endpoint title aboutHRef body : Async<Content<EndPoint>> =
+    let Main title aboutHRef body =
         Content.WithTemplate MainTemplate
             {
                 Title = title
@@ -35,7 +35,7 @@ module Site =
     open WebSharper.Html.Server
 
     let HomePage ctx =
-        Templating.Main ctx EndPoint.Home "Home" "/about" [
+        Templating.Main "Home" "/about" [
             Div [ClientSide <@ Client.Main() @>]
         ]
 
