@@ -1,12 +1,51 @@
 NUGET
   remote: https://www.nuget.org/api/v2
+    Argu (3.2)
+    DotNet.Contracts (1.10.20606.1)
+    DotParser (1.0.6)
+      FSharp.Core
+      FSharpx.Collections.Experimental
     FSharp.Core (4.0.0.1) - redirects: force
+    FSharpx.Collections (1.15.2)
+      FSharp.Core
+    FSharpx.Collections.Experimental (1.15.2)
+      FSharp.Core
+      FSharpx.Collections (>= 1.15.2)
+    IntelliFactory.Reactive (3.6.9.70)
+      WebSharper (>= 3.6.12.235)
+    IntelliFactory.Xml (0.6.63.95)
+    Mono.Addins (1.3.1)
     WebSharper (3.6.18.241)
+    WebSharper.Formlets (3.6.10.78)
+      IntelliFactory.Reactive (>= 3.6.9.70)
+      WebSharper (>= 3.6.12.235)
+      WebSharper.Html (>= 3.6.10.22)
+    WebSharper.Html (3.6.10.22)
+      IntelliFactory.Xml (>= 0.6.63.95)
+      WebSharper (>= 3.6.12.235)
+    WebSharper.UI.Next (3.6.15.211)
+      WebSharper (>= 3.6.12.235)
+    YC.PrettyPrinter (0.0.5)
+      FSharp.Core
+    YC.QuickGraph (3.7.3)
+      DotNet.Contracts
+      DotParser (>= 1.0.6)
+      FSharp.Core
+    YC.SDK.Runtime (0.1.0.1)
+      Argu (>= 3.2)
+      FSharp.Core (>= 4.0)
+      FSharpx.Collections.Experimental (>= 1.15.1)
+      Mono.Addins (>= 1.2)
+      YC.PrettyPrinter (>= 0.0.5)
+      YC.QuickGraph (>= 3.7.3)
+      YC.Utils.SourceText (>= 0.3.0.1)
+    YC.Utils.SourceText (0.3.0.1)
+      FSharp.Core (4.0.0.1)
 
 GROUP Build
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (4.39.1)
+    FAKE (4.47)
     FSharp.Compiler.Service (2.0.0.6)
     FSharp.Formatting (2.14.4)
       FSharp.Compiler.Service (2.0.0.6)
@@ -19,12 +58,12 @@ NUGET
     Microsoft.Net.Http (2.2.29) - framework: net10, net11, net20, net30, net35, net40, net40-full
       Microsoft.Bcl (>= 1.1.10)
       Microsoft.Bcl.Build (>= 1.0.14)
-    Octokit (0.22)
+    Octokit (0.23)
       Microsoft.Net.Http  - framework: net10, net11, net20, net30, net35, net40, net40-full
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (dab7b5aea40c0855cf35fc7d6e67fa4f411fb24b)
+    modules/Octokit/Octokit.fsx (954b349a91b815a707941dd0be0dfda124f51da9)
       Octokit (>= 0.20)
 GROUP Test
 NUGET

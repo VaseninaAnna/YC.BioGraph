@@ -375,8 +375,8 @@ Target "All" DoNothing
 "Clean"
   ==> "AssemblyInfo"
   ==> "Build"
-  ==> "CopyBinaries"
-  ==> "RunTests"
+//  ==> "CopyBinaries"
+//  ==> "RunTests"
   ==> "GenerateReferenceDocs"
   ==> "GenerateDocs"
 #if MONO
