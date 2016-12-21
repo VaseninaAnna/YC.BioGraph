@@ -111,7 +111,7 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="Main.html" />
-    <Content Include="graph%28kindof%29.jpg" />
+    <Content Include="defaultImg.svg" />
     <None Include="paket.references" />
     <None Include="paket.template" />
     <Content Include="App.config" />

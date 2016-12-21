@@ -1,6 +1,6 @@
 (function()
 {
- var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,FileReader,Unchecked,Control,FSharpEvent,List,Html,Client1,Attr,Tags,IntelliFactory,Formlets1,Base,Result,Blob,EventsPervasives,T,Data,Remoting,AjaxRemotingProvider,FormButtonConfiguration,Strings,String,jQuery;
+ var Global=this,Runtime=this.IntelliFactory.Runtime,Formlets,Formlet,Controls,Enhance,YC,BioGraph,Client,Control,FSharpEvent,List,Html,Client1,Attr,Tags,FileReader,IntelliFactory,Formlets1,Base,Result,EventsPervasives,T,Data,Remoting,AjaxRemotingProvider,FormButtonConfiguration,Strings,String,jQuery;
  Runtime.Define(Global,{
   YC:{
    BioGraph:{
@@ -26,17 +26,7 @@
      },
      FileControl:Runtime.Field(function()
      {
-      var readFile,f,formlet;
-      readFile=function(name)
-      {
-       var file;
-       file=new FileReader();
-       file.readAsText(name);
-       while(!Unchecked.Equals(file.readyState,2))
-        {
-        }
-       return file.result;
-      };
+      var f,formlet;
       f=function()
       {
        var stateChanged,x,x1,arg00,input,reset;
@@ -47,10 +37,17 @@
        {
         return function()
         {
-         return stateChanged.event.Trigger(Runtime.New(Result,{
-          $:0,
-          $0:readFile(new Blob("[ '"+el.get_Value()+"' ]"))
-         }));
+         var file,reader;
+         file=el.Dom.files.item(0);
+         reader=new FileReader();
+         reader.readAsText(file);
+         return reader.addEventListener("load",function()
+         {
+          return stateChanged.event.Trigger(Runtime.New(Result,{
+           $:0,
+           $0:reader.result
+          }));
+         },true);
         };
        };
        EventsPervasives.Events().OnChange(arg00,x1);
@@ -161,7 +158,7 @@
       }),_builder_.Delay(function()
       {
        var formlet1,x,tupledArg,height,width;
-       formlet1=Controls.ReadOnlyInput("0");
+       formlet1=Controls.Input("");
        x=Enhance.WithTextLabel("from",formlet1);
        tupledArg=Client.getFormSize(30,210);
        height=tupledArg[0];
@@ -173,7 +170,7 @@
       })),_builder_1.Delay(function()
       {
        var formlet1,x,tupledArg,height,width;
-       formlet1=Controls.ReadOnlyInput("0");
+       formlet1=Controls.Input("");
        x=Enhance.WithTextLabel("to",formlet1);
        tupledArg=Client.getFormSize(30,210);
        height=tupledArg[0];
@@ -188,20 +185,40 @@
       formlet4=Enhance.WithLabelAbove(formlet3);
       return Enhance.WithFormContainer(formlet4);
      }),
-     ShowImageControl:Runtime.Field(function()
+     ShowImageControl:function(grOption,drawGr)
      {
-      var formlet,formlet1,formlet2;
+      var matchValue,src,_,_1,formlet,formlet1,formlet2;
+      matchValue=[grOption,drawGr];
+      if(matchValue[0].$==1)
+       {
+        if(matchValue[1])
+         {
+          matchValue[0].$0;
+          _1="graphImg.svg";
+         }
+        else
+         {
+          matchValue[0].$0;
+          _1="defaultImg.svg";
+         }
+        _=_1;
+       }
+      else
+       {
+        _=matchValue[1]?"defaultImg.svg":"defaultImg.svg";
+       }
+      src=_;
       formlet=Formlet.OfElement(function()
       {
        var hw,arg10;
        hw="height: "+(Client.getFormSize(355,355))[0]+"; width: "+(Client.getFormSize(355,355))[0];
-       arg10=List.ofArray([Attr.Attr().NewAttr("style",hw),Attr.Attr().NewAttr("src","graph(kindof).jpg")]);
+       arg10=List.ofArray([Attr.Attr().NewAttr("style",hw),Attr.Attr().NewAttr("src",src)]);
        return Tags.Tags().NewTag("img",arg10);
       });
       formlet1=Enhance.WithTextLabel("Graph visualisation",formlet);
       formlet2=Enhance.WithLabelAbove(formlet1);
       return Enhance.WithFormContainer(formlet2);
-     }),
+     },
      frm:Runtime.Field(function()
      {
       var style,x,mapping,list,mapping1,list1,formlet,formlet1,formlet2,inputRecord,buttonConf,x1,InputForm,OutputForm,_builder_1,formlet4;
@@ -224,7 +241,7 @@
       list1=AjaxRemotingProvider.Sync("YC.BioGraph:0",[{
        $:0
       }]);
-      formlet=Controls.ReadOnlyCheckbox(false);
+      formlet=Controls.Checkbox(false);
       formlet1=Enhance.WithTextLabel("DRAW GRAPH",formlet);
       formlet2=Enhance.WithLabelLeft(formlet1);
       x=Data.$(Data.$(Data.$(Data.$(Formlet.Return(function(grm)
@@ -264,25 +281,43 @@
        _builder_=Formlet.Do();
        formlet3=_builder_.Delay(function()
        {
-        var _arg20_,_arg21_,matchValue,seqs,_,seqs1,txt;
+        var _arg20_,_arg21_,matchValue,patternInput,_,seqs,grOption,_1,graphOption,txt,seqs1,grOption1;
         _arg20_=rng[0];
         _arg21_=rng[1];
         matchValue=AjaxRemotingProvider.Sync("YC.BioGraph:2",[grm,graph,_arg20_,_arg21_,drawGr]);
         if(matchValue.$==1)
          {
-          seqs1=matchValue.$1;
-          matchValue.$0;
-          _=Strings.Join("/n",seqs1);
+          seqs=matchValue.$1;
+          grOption=matchValue.$0;
+          if(grOption.$==1)
+           {
+            graphOption=grOption.$0;
+            _1=[{
+             $:1,
+             $0:graphOption
+            },Strings.Join("/n",seqs)];
+           }
+          else
+           {
+            _1=[{
+             $:0
+            },Strings.Join("/n",seqs)];
+           }
+          _=_1;
          }
         else
          {
           txt=matchValue.$0;
-          _=txt;
+          _=[{
+           $:0
+          },txt];
          }
-        seqs=_;
-        return _builder_.Bind(Client.ShowImageControl(),function()
+        patternInput=_;
+        seqs1=patternInput[1];
+        grOption1=patternInput[0];
+        return _builder_.Bind(Client.ShowImageControl(grOption1,drawGr),function()
         {
-         return _builder_.Bind(Client.OutputControl(seqs),function(_arg2)
+         return _builder_.Bind(Client.OutputControl(seqs1),function(_arg2)
          {
           return _builder_.Return(_arg2);
          });
@@ -341,8 +376,6 @@
   YC=Runtime.Safe(Global.YC);
   BioGraph=Runtime.Safe(YC.BioGraph);
   Client=Runtime.Safe(BioGraph.Client);
-  FileReader=Runtime.Safe(Global.FileReader);
-  Unchecked=Runtime.Safe(Global.WebSharper.Unchecked);
   Control=Runtime.Safe(Global.WebSharper.Control);
   FSharpEvent=Runtime.Safe(Control.FSharpEvent);
   List=Runtime.Safe(Global.WebSharper.List);
@@ -350,11 +383,11 @@
   Client1=Runtime.Safe(Html.Client);
   Attr=Runtime.Safe(Client1.Attr);
   Tags=Runtime.Safe(Client1.Tags);
+  FileReader=Runtime.Safe(Global.FileReader);
   IntelliFactory=Runtime.Safe(Global.IntelliFactory);
   Formlets1=Runtime.Safe(IntelliFactory.Formlets);
   Base=Runtime.Safe(Formlets1.Base);
   Result=Runtime.Safe(Base.Result);
-  Blob=Runtime.Safe(Global.Blob);
   EventsPervasives=Runtime.Safe(Client1.EventsPervasives);
   T=Runtime.Safe(List.T);
   Data=Runtime.Safe(Formlets.Data);
@@ -370,7 +403,6 @@
   Client.screenWidth();
   Client.screenHeight();
   Client.frm();
-  Client.ShowImageControl();
   Client.RangeControl();
   Client.FileControl();
   return;
