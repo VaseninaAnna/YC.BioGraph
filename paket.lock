@@ -31,7 +31,7 @@ NUGET
       DotNet.Contracts
       DotParser (>= 1.0.6)
       FSharp.Core
-    YC.SDK.Runtime (0.1.0.1)
+    YC.SDK.Runtime (0.1.1)
       Argu (>= 3.2)
       FSharp.Core (>= 4.0)
       FSharpx.Collections.Experimental (>= 1.15.1)
@@ -63,7 +63,7 @@ NUGET
     SourceLink.Fake (1.1)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (954b349a91b815a707941dd0be0dfda124f51da9)
+    modules/Octokit/Octokit.fsx (eb92235e5092e5c3358cd11b7ebce64015d3f099)
       Octokit (>= 0.20)
 GROUP Test
 NUGET

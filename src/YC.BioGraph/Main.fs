@@ -13,40 +13,29 @@ module Templating =
     type Page =
         {
             Title : string
-            MenuBar : list<Element>
             Body : list<Element>
+            AboutHRef : string
         }
 
     let MainTemplate =
         Content.Template<Page>("~/Main.html")
             .With("title", fun x -> x.Title)
-            .With("menubar", fun x -> x.MenuBar)
             .With("body", fun x -> x.Body)
+            .With("about-href", fun x -> x.AboutHRef)
 
-    // Compute a menubar where the menu item for the given endpoint is active
-    let MenuBar (ctx: Context<EndPoint>) endpoint =
-        let ( => ) txt act =
-             LI [if endpoint = act then yield Attr.Class "active"] -< [
-                A [Attr.HRef (ctx.Link act)] -< [Text txt]
-             ]
-        [
-            //LI ["Home" => EndPoint.Home]
-            //LI [ "About" => EndPoint.About]
-        ]
-
-    let Main ctx endpoint title body : Async<Content<EndPoint>> =
+    let Main title aboutHRef body =
         Content.WithTemplate MainTemplate
             {
                 Title = title
-                MenuBar = MenuBar ctx endpoint
                 Body = body
+                AboutHRef = aboutHRef
             }
 
 module Site =
     open WebSharper.Html.Server
 
     let HomePage ctx =
-        Templating.Main ctx EndPoint.Home "Home" [
+        Templating.Main "Home" "/about" [
             Div [ClientSide <@ Client.Main() @>]
         ]
 

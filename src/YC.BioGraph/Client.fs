@@ -143,8 +143,8 @@ module Client =
                     | Server.Result.Error txt -> (None, txt)
                     | Server.Result.Success (grOption, seqs) -> 
                                                                   match grOption with
-                                                                  | None -> (None, System.String.Join("/n",seqs))
-                                                                  | Some(graphOption) -> (Some(graphOption), System.String.Join("/n",seqs))
+                                                                  | None -> (None, System.String.Join("\n",seqs))
+                                                                  | Some(graphOption) -> (Some(graphOption), System.String.Join("\n",seqs))
 
                 let! picture = ShowImageControl grOption drawGr
                 let! output = OutputControl seqs              
