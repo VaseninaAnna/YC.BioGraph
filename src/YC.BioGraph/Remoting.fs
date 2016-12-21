@@ -56,10 +56,10 @@ d: U"
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree ->
                     let et = Parser.tree2extTree tree
                     let edgesSeqs = Parser.extTree2edgesSeqs et
-                    let seqs = Parser.edgesSeqs2stringSeqs edgesSeqs graph
+                    let seqs = Parser.edgesSeqs2stringSeqs edgesSeqs graph range
                     if isOutputGraph then
-                        Success (None, seqs)
-                    else
                         Success (Some <| Parser.markGraph graph (Parser.extTree2edges et), seqs)
+                    else
+                        Success (None, seqs)
         with
         | e -> Error e.Message

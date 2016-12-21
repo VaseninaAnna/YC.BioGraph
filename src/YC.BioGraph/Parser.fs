@@ -270,9 +270,13 @@ module Parser =
             | PNode (_, (l, r)) -> [for ir in visit r do for il in visit l -> List.append il ir]
         visit extension'tree
 
-    let edgesSeqs2stringSeqs (edges'seqs: list<list<int * int>>) (graph: ParserInputGraph<Token>) =
+    let edgesSeqs2stringSeqs (edges'seqs: list<list<int * int>>) (graph: ParserInputGraph<Token>) ((from', to'): int * int) =
         let edge2token = graph.Edges |> Seq.map (fun edge -> ((edge.Source, edge.Target), edge.Tag)) |> Map.ofSeq
-        let xs = List.map ((List.map (fun ij -> match edge2token.[ij] with | A -> "A" | C -> "C" | G -> "G" | U -> "U" | _ -> "")) >> Seq.ofList >> String.concat "") edges'seqs
+        let xs = 
+            let xs =List.map ((List.map (fun ij -> match edge2token.[ij] with | A -> "A" | C -> "C" | G -> "G" | U -> "U" | _ -> "")) >> Seq.ofList >> String.concat "") edges'seqs
+            if from' >= 0 && to' >= 0 && from' < to'
+            then xs |> List.filter (fun (s: string) -> s.Length > to') |> List.map (fun (s: string) -> s.Substring(from', to' - 1))
+            else xs
         let mutable res = []
         for x in xs do
             if not <| List.contains x res then
