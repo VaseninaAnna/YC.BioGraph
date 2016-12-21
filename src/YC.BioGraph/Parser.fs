@@ -196,3 +196,49 @@ let dot2tree (tree'text: string) = (*
             | AndA -> And (genTree j)]
             *)
     tree'text//genTree 0
+
+type INodeCommonVisitor<'a>(visitObj: INodeCommonVisitor<'a> -> obj -> 'a, visitINode: INodeCommonVisitor<'a> -> INode -> 'a, visitNonTerminalNode: INodeCommonVisitor<'a> -> NonTerminalNode -> 'a, visitTerminalNode: INodeCommonVisitor<'a> -> TerminalNode -> 'a, visitPackedNode: INodeCommonVisitor<'a> -> PackedNode -> 'a, visitIntermidiateNode: INodeCommonVisitor<'a> -> IntermidiateNode -> 'a) =
+    member this.VisitObj: obj -> 'a = visitObj this
+    member this.VisitINode: INode -> 'a = visitINode this
+    member this.VisitNonTerminalNode: NonTerminalNode -> 'a = visitNonTerminalNode this
+    member this.VisitTerminalNode: TerminalNode -> 'a = visitTerminalNode this
+    member this.VisitPackedNode: PackedNode -> 'a = visitPackedNode this
+    member this.VisitIntermidiateNode: IntermidiateNode -> 'a = visitIntermidiateNode this
+
+type INodeVisitor<'a>(visitNonTerminalNode: INodeCommonVisitor<'a> -> NonTerminalNode -> 'a, visitTerminalNode: INodeCommonVisitor<'a> -> TerminalNode -> 'a, visitPackedNode: INodeCommonVisitor<'a> -> PackedNode -> 'a, visitIntermidiateNode: INodeCommonVisitor<'a> -> IntermidiateNode -> 'a) =
+    inherit INodeCommonVisitor<'a>(
+        (fun (this: INodeCommonVisitor<'a>) -> function
+        | :? INode as node -> this.VisitINode node
+        | x -> failwithf "Expected INode typed object but discovered %A typed object" (x.GetType())),
+        (fun (this: INodeCommonVisitor<'a>) -> function
+        | :? NonTerminalNode as node -> this.VisitNonTerminalNode node
+        | :? TerminalNode as node -> this.VisitTerminalNode node
+        | :? PackedNode as node -> this.VisitPackedNode node
+        | :? IntermidiateNode as node -> this.VisitIntermidiateNode node
+        | x -> failwithf "Expected NonTerminalNode or TerminalNode or PackedNode or IntermidiateNode typed object but discovered %A typed object" (x.GetType())),
+        visitNonTerminalNode, visitTerminalNode, visitPackedNode, visitIntermidiateNode)
+
+type ExtensionTree =
+    | Extension of int * int
+    | LNode of (int * int) * list<ExtensionTree>
+    | PNode of (int * int) * (ExtensionTree * ExtensionTree)
+
+let unpackExtension(ext: int64<extension>) =
+    let ``2^32`` = 256L * 256L * 256L * 256L
+    (int <| ext / ``2^32``, int <| ext % (``2^32`` * 1L<extension>))
+
+let f (tree: Yard.Generators.Common.ASTGLL.Tree<Token>) =
+    INodeVisitor(
+        (fun this node ->
+            LNode ((unpackExtension node.Extension), (this.VisitPackedNode node.First) :: (node.Others.ToArray() |> List.ofArray |> List.map this.VisitPackedNode))
+        ), 
+        (fun _ node ->
+            Extension (unpackExtension node.Extension)
+        ), 
+        (fun this node ->
+            PNode ((unpackExtension ((node :> INode).getExtension())), (this.VisitINode node.Left, this.VisitINode node.Right))
+        ), 
+        (fun this node ->
+            LNode ((unpackExtension node.Extension), (this.VisitPackedNode node.First) :: (node.Others.ToArray() |> List.ofArray |> List.map this.VisitPackedNode))
+        )
+    ).VisitObj (tree.Root)

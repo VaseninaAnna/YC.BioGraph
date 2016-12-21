@@ -69,6 +69,6 @@ d: U"
             else
                 match Parser.parse grammar graph with
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
-                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (sprintf "%s" (Parser.dot2tree <| Parser.ast2graph tree))
+                | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree -> Error (sprintf "%A" (Parser.f tree))
         with
         | e -> Error e.Message
