@@ -8,8 +8,8 @@ module Server =
         | Grammar
 
     type Result =
-        | Error of message: string
-        | Success of optGraph: option<Graph> * seqs: string[]
+        | Error of string
+        | Success of option<Graph> * string[]
         
     [<Rpc>]
     let LoadDefaultFileNames (fileType: FileType) =
