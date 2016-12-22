@@ -253,5 +253,3 @@ packages/
 # JetBrains Rider
 .idea/
 *.sln.iml
-packages/**
-src/YC.BioGraph/Content/WebSharper/**
