@@ -34,7 +34,7 @@ module Client =
     let ChooseDefaultControl (defaultData: List<string * string>) = 
         wsff.Do {
             let! dataSelect = 
-                wsfc.Select 0 (("", "") :: defaultData)
+                wsfc.Select 1 (("", "") :: defaultData)
                 |> wsfe.WithTextLabel "Choose default"
                 |> setFormSize (getFormSize 30 210) "select" 
                 |> wsfe.WithFormContainer     
@@ -60,10 +60,12 @@ module Client =
 
     let InputControl lbl defaultData =
         wsff.Do {
-            let! (defaultValue, fileInput) = wsff.Do { 
-                let! defaultValue = ChooseDefaultControl defaultData
-                let! fileInput = FileControl
-                return (defaultValue, fileInput) } |> wsff.FlipBody
+            let! (defaultValue, fileInput) = 
+                wsff.Do { 
+                    let! defaultValue = ChooseDefaultControl defaultData
+                    let! fileInput = FileControl
+                    return (defaultValue, fileInput) } 
+                |> wsff.FlipBody
             let txt = 
                 match fileInput with
                 | "" -> defaultValue
