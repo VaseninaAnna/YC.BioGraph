@@ -23,6 +23,7 @@ bld/
 [Ll]og/
 [Cc]ontent/
 [Ss]cripts/
+![Ss]cripts/js/
 
 # Visual Studio 2015 cache/options directory
 .vs/
