@@ -21,7 +21,7 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Ll]og/
-[Cc]ontents/
+[Cc]ontent/
 [Ss]cripts/
 
 # Visual Studio 2015 cache/options directory
@@ -245,6 +245,7 @@ _Pvt_Extensions
 # Paket dependency manager
 .paket/paket.exe
 paket-files/
+packages/
 
 # FAKE - F# Make
 .fake/
