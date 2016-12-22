@@ -169,3 +169,9 @@ module Client =
         Div [      
            MainForm
         ] 
+
+                                                     
+    let Graph () =
+        JS.Window?fullscreen_draw()
+        
+        Div [ ] 
