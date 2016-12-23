@@ -95,11 +95,18 @@ d: U"
                 match Parser.parse grammar graph with
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Error msg -> Error msg
                 | Yard.Generators.GLL.ParserCommon.ParseResult.Success tree ->
-                    let r = max 0 (fst range), max 0 (snd range)
-                    let extGraph = Parser.tree2extGraph tree
-                    let mapInput = Parser.inputGraph2Map graph
-                    let graphOpt = if isOutputGraph then Some (Parser.markGraph (graph.VertexCount - 1) mapInput (Parser.extGraph2edges extGraph)) else None
-                    let graphSeqs = Parser.seqFilter << (if r = (0, 0) then Parser.lazyTree2seqs else Parser.lazyTree2guardedSeqs r) << Parser.iLazyTree2lazyTree mapInput << Parser.extGraph2iLazyTree <| extGraph
-                    Success (graphOpt, graphSeqs)
+                    if fst range >= 0 && snd range >= fst range then
+                        let extGraph = Parser.tree2extGraph tree
+                        let mapInput = Parser.inputGraph2Map graph
+                        let graphOpt = if isOutputGraph then Some (Parser.markGraph (graph.VertexCount - 1) mapInput (Parser.extGraph2edges extGraph)) else None
+                        let graphSeqs = Parser.seqFilter << (Parser.lazyTree2guardedSeqs range) << Parser.iLazyTree2lazyTree mapInput << Parser.extGraph2iLazyTree <| extGraph
+                        Success (graphOpt, graphSeqs)
+                    elif range = (-1, -1) then
+                        let extGraph = Parser.tree2extGraph tree
+                        let mapInput = Parser.inputGraph2Map graph
+                        let graphOpt = if isOutputGraph then Some (Parser.markGraph (graph.VertexCount - 1) mapInput (Parser.extGraph2edges extGraph)) else None
+                        let graphSeqs = Parser.seqFilter << Parser.lazyTree2seqs << Parser.iLazyTree2lazyTree mapInput << Parser.extGraph2iLazyTree <| extGraph
+                        Success (graphOpt, graphSeqs)
+                    else Error "Unexcepted input range.\nRange must be (-1, -1) for output of all length seqs\nRange.from must be more or equal then 0 and Range.to must be more or equal than Range.from"
         with
         | e -> Error e.Message
