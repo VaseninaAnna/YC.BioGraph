@@ -53,24 +53,24 @@ module Templating =
 module Site =
     open WebSharper.Html.Server
     
-    let HomePage ctx =
+    let HomePage =
         Templating.Main "Home" "/about" [
             Div [ClientSide <@ Client.Main() @>]
         ]
 
-    let GraphPage ctx g i =
+    let GraphPage g i =
         Templating.Graph "Graph" [
             Div [ClientSide <@ Client.Graph g i @>]
         ]
 
-    let AboutPage ctx =
+    let AboutPage =
         Content.RedirectPermanentToUrl "https://github.com/Bio-graph-group/YC.BioGraph/wiki"
 
     [<Website>]
     let Main =
-        Application.MultiPage (fun ctx endpoint ->
+        Application.MultiPage (fun _ endpoint ->
             match endpoint with 
-            | EndPoint.Home -> HomePage ctx
-            | EndPoint.Graph (i, g) -> GraphPage ctx g i
-            | EndPoint.About -> AboutPage ctx
+            | EndPoint.Home -> HomePage
+            | EndPoint.Graph (i, g) -> GraphPage g i
+            | EndPoint.About -> AboutPage
         )
