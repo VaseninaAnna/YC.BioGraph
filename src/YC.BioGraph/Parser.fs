@@ -153,10 +153,6 @@ module Parser =
 
         let parserSource = new ParserSourceGLL<Token>(Token.EOF, tokenToNumber, genLiteral, numToString, tokenData, isLiteral, isTerminal, getLiteralNames, table, rules, rulesStart, fg.rules.leftSideArr, fg.startRule, fg.indexator.literalsEnd, fg.indexator.literalsStart, fg.indexator.termsEnd, fg.indexator.termsStart, fg.indexator.termCount, fg.indexator.nonTermCount, fg.indexator.literalsCount, fg.indexator.eofIndex, fg.rules.rulesCount, fg.indexator.fullCount, acceptEmptyInput, numIsTerminal, numIsNonTerminal, numIsLiteral, fg.canInferEpsilon, slots |> dict)
         parserSource
-        //let gfg = GrammarFlowGraph()
-
-        //type HGrammar<'TInt> =
-        //    HGrammar of 'TInt * list<'TInt * list<'TInt>>
 
     let parse grammar graph = buildAbstractAst<Token> grammar graph
 
