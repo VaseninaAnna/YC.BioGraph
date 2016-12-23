@@ -160,55 +160,6 @@ module Parser =
 
     let parse grammar graph = buildAbstractAst<Token> grammar graph
 
-    type Action =
-        | EmptyA
-        | TermA of string
-        | UntermA of string
-        | OrA of string
-        | AndA
-
-    type ActionTree =
-        | Empty
-        | Term of string
-        | Unterm of string * list<ActionTree>
-        | Or of string * list<ActionTree>
-        | And of list<ActionTree>
-
-    let dot2tree (tree'text: string) = (*
-        let gd = DotParser.parse tree'text
-        let n = gd.Nodes.Count
-        let appAction (attrs: list<GraphData.Attributes>) =
-            let mutable label = ""
-            let mutable shape = ""
-            for attrss in attrs do
-                for attr in attrss do
-                    if attr.Key = "label"
-                    then label <- attr.Value
-                    elif attr.Key = "shape"
-                    then shape <- attr.Value
-            match shape with
-            | "" -> EmptyA
-            | "point" -> AndA
-            | "box" -> if label.[0] = 't' then TermA label else OrA label
-            | "oval" -> UntermA label
-        let g = Array2D.init n n (fun s t -> if not <| gd.Edges.ContainsKey(string s, string t) then EmptyA else appAction gd.Edges.[string s, string t])
-    
-        let rec genTree i =
-            [for j in 0..n-1 ->
-                match g.[i, j] with
-                | EmptyA -> Empty
-                | TermA t -> Term t
-                | UntermA u -> Unterm (u, genTree j)
-                | OrA t -> Or (t, genTree j)
-                | AndA -> And (genTree j)]
-                *)
-        tree'text//genTree 0
-
-    type ExtensionTree =
-        | Extension of int * int
-        | LNode of (int * int) * list<ExtensionTree>
-        | PNode of (int * int) * (ExtensionTree * ExtensionTree)
-
     let unpackExtension(ext: int64<extension>) =
         let ``2^32`` = 256L * 256L * 256L * 256L
         (int <| ext / ``2^32``, int <| ext % (``2^32`` * 1L<extension>))
@@ -222,10 +173,10 @@ module Parser =
             ors: Map<ExtensionEdge, list<ExtensionEdge>>
         }
     
-    let genDummy = -1, -1L<extension>
-    let genTermEdge (i: int64<extension>) = 0, i
-    let mutable j = 0
-    let genNodeEdge (i: int64<extension>) =
+    let internal genDummy = -1, -1L<extension>
+    let internal genTermEdge (i: int64<extension>) = 0, i
+    let mutable private j = 0
+    let internal genNodeEdge (i: int64<extension>) =
         j <- 1 + j
         j, i
     let tree2extGraph (tree: Yard.Generators.Common.ASTGLL.Tree<Token>): ExtensionGraph =
