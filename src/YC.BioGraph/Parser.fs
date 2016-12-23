@@ -158,10 +158,6 @@ module Parser =
         //type HGrammar<'TInt> =
         //    HGrammar of 'TInt * list<'TInt * list<'TInt>>
 
-    let ast2graph (tree: Yard.Generators.Common.ASTGLL.Tree<Token>) =
-        tree.AstToDot indToString tokenToNumber tokenData "x.dot"
-        System.IO.File.ReadAllText "x.dot"
-
     let parse grammar graph = buildAbstractAst<Token> grammar graph
 
     type Action =
@@ -207,27 +203,6 @@ module Parser =
                 | AndA -> And (genTree j)]
                 *)
         tree'text//genTree 0
-
-    type INodeCommonVisitor<'a>(visitObj: INodeCommonVisitor<'a> -> obj -> 'a, visitINode: INodeCommonVisitor<'a> -> INode -> 'a, visitNonTerminalNode: INodeCommonVisitor<'a> -> NonTerminalNode -> 'a, visitTerminalNode: INodeCommonVisitor<'a> -> TerminalNode -> 'a, visitPackedNode: INodeCommonVisitor<'a> -> PackedNode -> 'a, visitIntermidiateNode: INodeCommonVisitor<'a> -> IntermidiateNode -> 'a) =
-        member this.VisitObj: obj -> 'a = visitObj this
-        member this.VisitINode: INode -> 'a = visitINode this
-        member this.VisitNonTerminalNode: NonTerminalNode -> 'a = visitNonTerminalNode this
-        member this.VisitTerminalNode: TerminalNode -> 'a = visitTerminalNode this
-        member this.VisitPackedNode: PackedNode -> 'a = visitPackedNode this
-        member this.VisitIntermidiateNode: IntermidiateNode -> 'a = visitIntermidiateNode this
-
-    type INodeVisitor<'a>(visitNonTerminalNode: INodeCommonVisitor<'a> -> NonTerminalNode -> 'a, visitTerminalNode: INodeCommonVisitor<'a> -> TerminalNode -> 'a, visitPackedNode: INodeCommonVisitor<'a> -> PackedNode -> 'a, visitIntermidiateNode: INodeCommonVisitor<'a> -> IntermidiateNode -> 'a) =
-        inherit INodeCommonVisitor<'a>(
-            (fun (this: INodeCommonVisitor<'a>) -> function
-            | :? INode as node -> this.VisitINode node
-            | x -> failwithf "Expected INode typed object but discovered %A typed object" (x.GetType())),
-            (fun (this: INodeCommonVisitor<'a>) -> function
-            | :? NonTerminalNode as node -> this.VisitNonTerminalNode node
-            | :? TerminalNode as node -> this.VisitTerminalNode node
-            | :? PackedNode as node -> this.VisitPackedNode node
-            | :? IntermidiateNode as node -> this.VisitIntermidiateNode node
-            | x -> failwithf "Expected NonTerminalNode or TerminalNode or PackedNode or IntermidiateNode typed object but discovered %A typed object" (x.GetType())),
-            visitNonTerminalNode, visitTerminalNode, visitPackedNode, visitIntermidiateNode)
 
     type ExtensionTree =
         | Extension of int * int
@@ -389,12 +364,7 @@ module Parser =
         | And(_, _) when snd range = 0 -> [""]
         | _ -> []
     
-    let seqFilter (xs: list<string>) : string[] =
-        let mutable ys = []
-        for x in xs do
-            if not <| List.contains x ys then
-                ys <- x :: ys
-        Array.ofList ys
+    let seqFilter: list<string> -> string[] = Set >> Set.toArray
     
     let markGraph (vc: int) (mapInput: Map<int * int, Nuc>) (markers: list<int * int>): Graph =
         {
