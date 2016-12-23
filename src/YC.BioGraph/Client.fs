@@ -34,7 +34,7 @@ module Client =
     let ChooseDefaultControl (defaultData: List<string * string>) = 
         wsff.Do {
             let! dataSelect = 
-                wsfc.Select 0 defaultData
+                wsfc.Select 1 (("", "") :: defaultData)
                 |> wsfe.WithTextLabel "Choose default"
                 |> setFormSize (getFormSize 30 210) "select" 
                 |> wsfe.WithFormContainer     
@@ -60,11 +60,18 @@ module Client =
 
     let InputControl lbl defaultData =
         wsff.Do {
-            let! defaultValue = (wsff.Do {
-                                     let! fileInput = FileControl
-                                     return! ChooseDefaultControl (("", fileInput) :: defaultData) } )
+            let! (defaultValue, fileInput) = 
+                wsff.Do { 
+                    let! defaultValue = ChooseDefaultControl defaultData
+                    let! fileInput = FileControl
+                    return (defaultValue, fileInput) } 
+                |> wsff.FlipBody
+            let txt = 
+                match fileInput with
+                | "" -> defaultValue
+                | _ -> fileInput
             let! textInput =
-                    wsfc.TextArea defaultValue              
+                    wsfc.TextArea txt              
                     |> wsfe.WithTextLabel lbl
                     |> wsfe.WithLabelAbove
                     |> setFormSize (getFormSize 85 500) "textarea"          
@@ -124,7 +131,7 @@ module Client =
 
     let frm =   
         let InputForm  =
-            let style = "background-color: #FF1493; border-width: 3px; border-color: #000000; height: " + fst(getFormSize 40 80) + "; width: " + snd(getFormSize 40 80) + "; font-size:" + fst(getFormSize 30 80); 
+            let style = "padding-top: 0px; background-color: #FF69B4; border-width: 3px; border-color: #000000; color: #000000; height: " + fst(getFormSize 40 80) + "; width: " + snd(getFormSize 40 80) + "; font-size:" + fst(getFormSize 26 80); 
 
             (wsff.Yield (fun (grm: string) (graph: string) (rng: int * int) (drawGr: bool) -> (grm, graph, rng, drawGr))
             <*> (InputControl "Grammar" (Server.LoadDefaultFileNames Server.FileType.Grammar |> List.map (fun grmName -> grmName, Server.LoadDefaultFile Server.FileType.Grammar grmName)))
@@ -164,3 +171,8 @@ module Client =
         Div [      
            MainForm
         ] 
+
+                                                     
+    let Graph (g: array<int * int * string * int>) (c: int) =
+        JS.Window?fullscreen_draw g c
+        Div [ ] 

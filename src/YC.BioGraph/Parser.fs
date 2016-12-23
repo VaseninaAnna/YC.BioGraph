@@ -1,6 +1,3 @@
-// Дополнительные сведения о F# см. на http://fsharp.org
-// Дополнительную справку см. в проекте "Учебник по F#".
-
 namespace YC.BioGraph
 
 type Nuc = | A | C | G | U
@@ -153,146 +150,171 @@ module Parser =
 
         let parserSource = new ParserSourceGLL<Token>(Token.EOF, tokenToNumber, genLiteral, numToString, tokenData, isLiteral, isTerminal, getLiteralNames, table, rules, rulesStart, fg.rules.leftSideArr, fg.startRule, fg.indexator.literalsEnd, fg.indexator.literalsStart, fg.indexator.termsEnd, fg.indexator.termsStart, fg.indexator.termCount, fg.indexator.nonTermCount, fg.indexator.literalsCount, fg.indexator.eofIndex, fg.rules.rulesCount, fg.indexator.fullCount, acceptEmptyInput, numIsTerminal, numIsNonTerminal, numIsLiteral, fg.canInferEpsilon, slots |> dict)
         parserSource
-        //let gfg = GrammarFlowGraph()
-
-        //type HGrammar<'TInt> =
-        //    HGrammar of 'TInt * list<'TInt * list<'TInt>>
-
-    let ast2graph (tree: Yard.Generators.Common.ASTGLL.Tree<Token>) =
-        tree.AstToDot indToString tokenToNumber tokenData "x.dot"
-        System.IO.File.ReadAllText "x.dot"
 
     let parse grammar graph = buildAbstractAst<Token> grammar graph
-
-    type Action =
-        | EmptyA
-        | TermA of string
-        | UntermA of string
-        | OrA of string
-        | AndA
-
-    type ActionTree =
-        | Empty
-        | Term of string
-        | Unterm of string * list<ActionTree>
-        | Or of string * list<ActionTree>
-        | And of list<ActionTree>
-
-    let dot2tree (tree'text: string) = (*
-        let gd = DotParser.parse tree'text
-        let n = gd.Nodes.Count
-        let appAction (attrs: list<GraphData.Attributes>) =
-            let mutable label = ""
-            let mutable shape = ""
-            for attrss in attrs do
-                for attr in attrss do
-                    if attr.Key = "label"
-                    then label <- attr.Value
-                    elif attr.Key = "shape"
-                    then shape <- attr.Value
-            match shape with
-            | "" -> EmptyA
-            | "point" -> AndA
-            | "box" -> if label.[0] = 't' then TermA label else OrA label
-            | "oval" -> UntermA label
-        let g = Array2D.init n n (fun s t -> if not <| gd.Edges.ContainsKey(string s, string t) then EmptyA else appAction gd.Edges.[string s, string t])
-    
-        let rec genTree i =
-            [for j in 0..n-1 ->
-                match g.[i, j] with
-                | EmptyA -> Empty
-                | TermA t -> Term t
-                | UntermA u -> Unterm (u, genTree j)
-                | OrA t -> Or (t, genTree j)
-                | AndA -> And (genTree j)]
-                *)
-        tree'text//genTree 0
-
-    type INodeCommonVisitor<'a>(visitObj: INodeCommonVisitor<'a> -> obj -> 'a, visitINode: INodeCommonVisitor<'a> -> INode -> 'a, visitNonTerminalNode: INodeCommonVisitor<'a> -> NonTerminalNode -> 'a, visitTerminalNode: INodeCommonVisitor<'a> -> TerminalNode -> 'a, visitPackedNode: INodeCommonVisitor<'a> -> PackedNode -> 'a, visitIntermidiateNode: INodeCommonVisitor<'a> -> IntermidiateNode -> 'a) =
-        member this.VisitObj: obj -> 'a = visitObj this
-        member this.VisitINode: INode -> 'a = visitINode this
-        member this.VisitNonTerminalNode: NonTerminalNode -> 'a = visitNonTerminalNode this
-        member this.VisitTerminalNode: TerminalNode -> 'a = visitTerminalNode this
-        member this.VisitPackedNode: PackedNode -> 'a = visitPackedNode this
-        member this.VisitIntermidiateNode: IntermidiateNode -> 'a = visitIntermidiateNode this
-
-    type INodeVisitor<'a>(visitNonTerminalNode: INodeCommonVisitor<'a> -> NonTerminalNode -> 'a, visitTerminalNode: INodeCommonVisitor<'a> -> TerminalNode -> 'a, visitPackedNode: INodeCommonVisitor<'a> -> PackedNode -> 'a, visitIntermidiateNode: INodeCommonVisitor<'a> -> IntermidiateNode -> 'a) =
-        inherit INodeCommonVisitor<'a>(
-            (fun (this: INodeCommonVisitor<'a>) -> function
-            | :? INode as node -> this.VisitINode node
-            | x -> failwithf "Expected INode typed object but discovered %A typed object" (x.GetType())),
-            (fun (this: INodeCommonVisitor<'a>) -> function
-            | :? NonTerminalNode as node -> this.VisitNonTerminalNode node
-            | :? TerminalNode as node -> this.VisitTerminalNode node
-            | :? PackedNode as node -> this.VisitPackedNode node
-            | :? IntermidiateNode as node -> this.VisitIntermidiateNode node
-            | x -> failwithf "Expected NonTerminalNode or TerminalNode or PackedNode or IntermidiateNode typed object but discovered %A typed object" (x.GetType())),
-            visitNonTerminalNode, visitTerminalNode, visitPackedNode, visitIntermidiateNode)
-
-    type ExtensionTree =
-        | Extension of int * int
-        | LNode of (int * int) * list<ExtensionTree>
-        | PNode of (int * int) * (ExtensionTree * ExtensionTree)
 
     let unpackExtension(ext: int64<extension>) =
         let ``2^32`` = 256L * 256L * 256L * 256L
         (int <| ext / ``2^32``, int <| ext % (``2^32`` * 1L<extension>))
-
-    let tree2extTree (tree: Yard.Generators.Common.ASTGLL.Tree<Token>) =
-        INodeVisitor(
-            (fun this node ->
-                LNode ((unpackExtension node.Extension), (this.VisitPackedNode node.First) :: (let o = node.Others in if o = null then [] else o.ToArray() |> List.ofArray |> List.map this.VisitPackedNode))
-            ), 
-            (fun _ node ->
-                Extension (unpackExtension node.Extension)
-            ), 
-            (fun this node ->
-                PNode ((unpackExtension ((node :> INode).getExtension())), (this.VisitINode node.Left, this.VisitINode node.Right))
-            ), 
-            (fun this node ->
-                LNode ((unpackExtension node.Extension), (this.VisitPackedNode node.First) :: (let o = node.Others in if o = null then [] else o.ToArray() |> List.ofArray |> List.map this.VisitPackedNode))
-            )
-        ).VisitObj (tree.Root)
     
-    let extTree2edges (extension'tree: ExtensionTree): list<int * int> =
-        let mutable res = []
-        let rec visit = function
-            | Extension (i, j) -> if i >= 0 && j >= 0 && not <| List.contains (i, j) res then res <- (i, j) :: res
-            | LNode (_, xs) -> List.iter visit xs
-            | PNode (_, (l, r)) -> visit l; visit r
-        visit extension'tree
-        res
-
-    let extTree2edgesSeqs (extension'tree: ExtensionTree): list<list<int * int>> =
-        let rec visit = function
-            | Extension (i, j) -> if i >= 0 && j >= 0 then [[i, j]] else [[]]
-            | LNode (_, xs) -> List.map visit xs |> List.fold List.append []
-            | PNode (_, (l, r)) -> [for ir in visit r do for il in visit l -> List.append il ir]
-        visit extension'tree
-
-    let edgesSeqs2stringSeqs (edges'seqs: list<list<int * int>>) (graph: ParserInputGraph<Token>) ((from', to'): int * int) =
-        let edge2token = graph.Edges |> Seq.map (fun edge -> ((edge.Source, edge.Target), edge.Tag)) |> Map.ofSeq
-        let xs = 
-            let xs =List.map ((List.map (fun ij -> match edge2token.[ij] with | A -> "A" | C -> "C" | G -> "G" | U -> "U" | _ -> "")) >> Seq.ofList >> String.concat "") edges'seqs
-            if from' >= 0 && to' >= 0 && from' < to'
-            then xs |> List.filter (fun (s: string) -> s.Length > to') |> List.map (fun (s: string) -> s.Substring(from', to' - 1))
-            else xs
-        let mutable res = []
-        for x in xs do
-            if not <| List.contains x res then
-                res <- x :: res
-        Array.ofList res
-
-    let markGraph (graph: ParserInputGraph<Token>) (markers: list<int * int>): Graph =
+    type ExtensionEdge = int * int64<extension>
+    type ExtensionGraph =
         {
-            countOfVertex = graph.VertexCount - 1
+            start: ExtensionEdge
+            terminals: list<int64<extension>>
+            ands: Map<ExtensionEdge, ExtensionEdge * ExtensionEdge>
+            ors: Map<ExtensionEdge, list<ExtensionEdge>>
+        }
+    
+    let internal genDummy = -1, -1L<extension>
+    let internal genTermEdge (i: int64<extension>) = 0, i
+    let mutable private j = 0
+    let internal genNodeEdge (i: int64<extension>) =
+        j <- 1 + j
+        j, i
+    let tree2extGraph (tree: Yard.Generators.Common.ASTGLL.Tree<Token>): ExtensionGraph =
+        j <- 0
+        let mutable terminals = []
+        let mutable ands = Map.empty
+        let mutable ors = Map.empty
+
+        let rec f (linkStack: list<ExtensionEdge * obj>) (current: obj): ExtensionEdge =
+            if current <> null then
+                let xs = List.filter (snd >> ((=) current)) linkStack
+                if List.length xs > 0 then
+                    fst xs.Head
+                else
+                    match current with
+                    | :? TerminalNode as node ->
+                        if not <| List.contains node.Extension terminals then
+                            terminals <- node.Extension :: terminals
+                        genTermEdge node.Extension
+                    | :? PackedNode as node ->
+                        let res = genNodeEdge ((node :> INode).getExtension())
+                        let l = f ((res, current) :: linkStack) node.Left
+                        let r = f ((res, current) :: linkStack) node.Right
+                        ands <- Map.add res (l, r) ands
+                        res
+                    | :? NonTerminalNode as node ->
+                        let res = genNodeEdge node.Extension
+                        let xs =
+                            (f ((res, current) :: linkStack) node.First)
+                            :: (if node.Others <> null then [for it in node.Others -> f ((res, current) :: linkStack) it]
+                                else [])
+                        ors <- Map.add res xs ors
+                        res
+                    | :? IntermidiateNode as node ->
+                        let res = genNodeEdge node.Extension
+                        let xs =
+                            (f ((res, current) :: linkStack) node.First)
+                            :: (if node.Others <> null then [for it in node.Others -> f ((res, current) :: linkStack) it]
+                                else [])
+                        ors <- Map.add res xs ors
+                        res
+                    | _ -> genDummy
+            else genDummy
+
+        {
+            start = f [] tree.Root
+            terminals = terminals
+            ands = ands
+            ors = ors
+        }
+    
+    let extGraph2edges (g: ExtensionGraph): list<int * int> =
+        List.map unpackExtension g.terminals
+    
+    type LazyRegTree =
+        | Or of seq<LazyRegTree>
+        | And of Nuc * (unit -> LazyRegTree)
+        | Empty
+    
+    let inputGraph2Map (inputG: ParserInputGraph<Token>) : Map<int * int, Nuc> =
+        inputG.Edges
+        |> Seq.filter (fun edge -> edge.Tag <> EOF)
+        |> Seq.map (fun edge ->
+                   (edge.Source, edge.Target),
+                   (match edge.Tag with | A -> Nuc.A | C -> Nuc.C | G -> Nuc.G | U -> Nuc.U))
+        |> Map.ofSeq
+        
+    type ILazyRegTree =
+        | IOr of seq<ILazyRegTree>
+        | IAnd of int64<extension> * (unit -> ILazyRegTree)
+        | IEmpty
+        
+    let rec iDisOr (x: ILazyRegTree): seq<ILazyRegTree> =
+        match x with
+        | IOr xt -> seq { for xi in xt do for it in iDisOr xi -> it }
+        | o -> seq { yield o }
+
+    let rec iAndComb (f: unit -> ILazyRegTree) (s: unit -> ILazyRegTree): unit -> ILazyRegTree =
+        fun () ->
+            match f () with
+            | IEmpty -> s ()
+            | IAnd (t, o) -> IAnd (t, iAndComb o s)
+            | IOr its -> IOr (seq { for it in iDisOr (IOr its) -> iAndComb (fun () -> it) s () })
+
+    let extGraph2iLazyTree (g: ExtensionGraph) : ILazyRegTree =
+        let rec gen current =
+            match current with
+            | (0, -1L<extension>) -> IEmpty
+            | (0, tind) -> IAnd (tind, (fun () -> IEmpty))
+            | x ->
+                if Map.containsKey x g.ands then
+                    let l, r = g.ands.[x]
+                    iAndComb (fun () -> gen l) (fun () -> gen r) ()
+                elif Map.containsKey x g.ors then
+                    IOr << iDisOr << IOr <| (seq { for it in g.ors.[x] -> gen it })//<< disOr << Or <| List.map gen g.ors.[x]
+                else IOr Seq.empty
+        let f = gen (g.start)
+        let g () = f
+        g ()
+    
+    let iLazyTree2lazyTree (inputG: Map<int * int, Nuc>) (g: ILazyRegTree): LazyRegTree =
+        let rec il2l (gr: ILazyRegTree) =
+            match gr with
+            | IEmpty -> Empty
+            | IAnd(e, o) ->
+                let ext = unpackExtension e
+                if Map.containsKey ext inputG then
+                    And(inputG.[ext], fun () -> il2l <| o ())
+                else il2l <| o ()
+            | IOr s -> Or (seq { for it in s -> il2l it })
+        il2l g
+
+    let rec lazyTree2seqs (lt: LazyRegTree) : list<string> =
+        match lt with
+        | Empty -> [""]
+        | And(Nuc.A, o) -> List.map ((+) "A") (lazyTree2seqs (o ()))
+        | And(Nuc.C, o) -> List.map ((+) "C") (lazyTree2seqs (o ()))
+        | And(Nuc.G, o) -> List.map ((+) "G") (lazyTree2seqs (o ()))
+        | And(Nuc.U, o) -> List.map ((+) "U") (lazyTree2seqs (o ()))
+        | Or xs -> Seq.fold List.append [] (Seq.map lazyTree2seqs xs)
+
+    let rec lazyTree2guardedSeqs (range: int * int) (lt: LazyRegTree) : list<string> =
+        let next =
+            match range with
+            | 0, 0 -> 0, 0
+            | 0, x -> 0, x - 1
+            | x, y -> x - 1, y - 1
+        match lt with
+        | Empty when snd range = 0 -> [""]
+        | Or xs when snd range >= 0 -> Seq.fold List.append [] (Seq.map (lazyTree2guardedSeqs range) xs)
+        | And(Nuc.A, o) when fst range = 0 && snd range > 0 -> List.map ((+) "A") (lazyTree2guardedSeqs next (o ()))
+        | And(Nuc.C, o) when fst range = 0 && snd range > 0 -> List.map ((+) "C") (lazyTree2guardedSeqs next (o ()))
+        | And(Nuc.G, o) when fst range = 0 && snd range > 0 -> List.map ((+) "G") (lazyTree2guardedSeqs next (o ()))
+        | And(Nuc.U, o) when fst range = 0 && snd range > 0 -> List.map ((+) "U") (lazyTree2guardedSeqs next (o ()))
+        | And(_, o) when fst range <> 0 && snd range > 0 -> lazyTree2guardedSeqs next (o ())
+        | And(_, _) when snd range = 0 -> [""]
+        | _ -> []
+    
+    let seqFilter: list<string> -> string[] = Set >> Set.toArray
+    
+    let markGraph (vc: int) (mapInput: Map<int * int, Nuc>) (markers: list<int * int>): Graph =
+        {
+            countOfVertex = vc
             edges =
-                graph.Edges
-                |> Seq.filter (fun edge -> edge.Tag <> EOF)
-                |> Seq.map (fun edge ->
-                    edge.Source,
-                    edge.Target,
-                    (match edge.Tag with | A -> Nuc.A | C -> Nuc.C | G -> Nuc.G | U -> Nuc.U),
-                    List.contains (edge.Source, edge.Target) markers)
-                |> Array.ofSeq
+                mapInput
+                |> Map.toArray
+                |> Array.map (fun ((s, t), tok) -> (s, t, tok, List.contains (s, t) markers))
         }
