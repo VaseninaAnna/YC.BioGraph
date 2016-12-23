@@ -6,7 +6,7 @@ open WebSharper.Sitelets
 type EndPoint =
     | [<EndPoint "/">] Home
     | [<EndPoint "/about">] About
-    | [<EndPoint "/graph">] Graph
+    | [<EndPoint "/graph"; Wildcard>] Graph of countOfVertex:int * edges: array<int * int * string * int>
 
 module Templating =
     open WebSharper.Html.Server
@@ -43,7 +43,7 @@ module Templating =
                 AboutHRef = aboutHRef
             }
 
-    let Graph title ctx body =
+    let Graph title body =
         Content.WithTemplate GraphTemplate
             {
                 Title = title
@@ -58,9 +58,9 @@ module Site =
             Div [ClientSide <@ Client.Main() @>]
         ]
 
-    let GraphPage ctx =
-        Templating.Graph "Graph" ctx [
-            Div [ClientSide <@ Client.Graph() @>]
+    let GraphPage ctx g i =
+        Templating.Graph "Graph" [
+            Div [ClientSide <@ Client.Graph g i @>]
         ]
 
     let AboutPage ctx =
@@ -69,8 +69,8 @@ module Site =
     [<Website>]
     let Main =
         Application.MultiPage (fun ctx endpoint ->
-            match endpoint with
+            match endpoint with 
             | EndPoint.Home -> HomePage ctx
-            | EndPoint.Graph -> GraphPage ctx
+            | EndPoint.Graph (i, g) -> GraphPage ctx g i
             | EndPoint.About -> AboutPage ctx
         )

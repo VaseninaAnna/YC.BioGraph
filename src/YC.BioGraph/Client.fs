@@ -171,7 +171,6 @@ module Client =
         ] 
 
                                                      
-    let Graph () =
-        JS.Window?fullscreen_draw()
-        
+    let Graph (g: array<int * int * string * int>) (c: int) =
+        JS.Window?fullscreen_draw g c
         Div [ ] 
