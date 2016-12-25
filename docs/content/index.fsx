@@ -25,9 +25,9 @@ This app also visualizes the obtained sequences on input graph.
 
 Example
 -------
-<img src="@Root/img/logo.png" alt="F# Project"/>
 
 This example demonstrates using the web application for parsing graphs.
+<img src="img/startex.jpg" alt="start example"/>
 
 Samples & documentation
 -----------------------

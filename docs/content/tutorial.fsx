@@ -14,28 +14,34 @@ To start working with YC.BioGraph web application you need to fill in grammar, g
 
 You can use one of default grammars/graphs
 
-image
+<img src="img/def.png" alt="default"/>
 
 choose file from your device
 
-image
+<img src="img/file.png" alt="file"/>
 
 or write them in the input textbox as you can see here.
 
-2 textboxes
+<img src="img/text1.png" alt="textbox1"/>
+<img src="img/text2.png" alt="textbox2"/>
 
 Remember that the range input should be correct.
 
-image
+<img src="img/range.png" alt="range"/>
 
 If you want to visualize graph, use checkbox.
 After filling in all the forms press button "GO" to see the result.
 
-image
+<img src="img/go.jpg" alt="go"/>
 
 Some more examples
 ------------------
 
-images
+ * Example 1 <img src="img/ex1.jpg" alt="example1"/>
+
+ * Example 2 <img src="img/ex2.jpg" alt="example2"/>
+
+ * Example 3 <img src="img/ex2.jpg" alt="example3"/>
+
 
 *)
