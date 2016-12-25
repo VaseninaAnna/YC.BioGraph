@@ -9,12 +9,15 @@ YC.BioGraph
 
 Documentation
 
+YC.BioGraph is a special web application for searching subpaths in the metagenomic sequences. 
+This app also visualizes the obtained sequences on input graph.
+
 <div class="row">
   <div class="span1"></div>
   <div class="span6">
     <div class="well well-small" id="nuget">
-      The YC.BioGraph library can be <a href="https://nuget.org/packages/YC.BioGraph">installed from NuGet</a>:
-      <pre>PM> Install-Package YC.BioGraph</pre>
+      Use the YC.BioGraph web application :
+      <pre><a href="">ref</a></pre>
     </div>
   </div>
   <div class="span1"></div>
@@ -23,23 +26,11 @@ Documentation
 Example
 -------
 
-This example demonstrates using a function defined in this sample library.
-
-*)
-#r "YC.BioGraph.dll"
-open YC.BioGraph
-
-printfn "hello = %i" <| Library.hello 0
-
-(**
-Some more info
+This example demonstrates using the web application for parsing graphs.
+<img src="img/startex.jpg" alt="start example"/>
 
 Samples & documentation
 -----------------------
-
-The library comes with comprehensible documentation. 
-It can include tutorials automatically generated from `*.fsx` files in [the content folder][content]. 
-The API reference is automatically generated from Markdown comments in the library implementation.
 
  * [Tutorial](tutorial.html) contains a further explanation of this sample library.
 
@@ -59,9 +50,9 @@ The library is available under Public Domain license, which allows modification 
 redistribution for both commercial and non-commercial purposes. For more information see the 
 [License file][license] in the GitHub repository. 
 
-  [content]: https://github.com/fsprojects/YC.BioGraph/tree/master/docs/content
-  [gh]: https://github.com/fsprojects/YC.BioGraph
-  [issues]: https://github.com/fsprojects/YC.BioGraph/issues
-  [readme]: https://github.com/fsprojects/YC.BioGraph/blob/master/README.md
-  [license]: https://github.com/fsprojects/YC.BioGraph/blob/master/LICENSE.txt
+  [content]: https://github.com/YaccConstructor/YC.BioGraph/tree/master/docs/content
+  [gh]: https://github.com/YaccConstructor/YC.BioGraph
+  [issues]: https://github.com/YaccConstructor/YC.BioGraph/issues
+  [readme]: https://github.com/YaccConstructor/YC.BioGraph/blob/master/README.md
+  [license]: https://github.com/YaccConstructor/YC.BioGraph/blob/master/LICENSE.txt
 *)

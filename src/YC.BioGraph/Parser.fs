@@ -284,7 +284,7 @@ module Parser =
 
     let rec lazyTree2seqs (lt: LazyRegTree) : list<string> =
         match lt with
-        | Empty -> [""]
+        | Empty -> ["<eos>"]
         | And(Nuc.A, o) -> List.map ((+) "A") (lazyTree2seqs (o ()))
         | And(Nuc.C, o) -> List.map ((+) "C") (lazyTree2seqs (o ()))
         | And(Nuc.G, o) -> List.map ((+) "G") (lazyTree2seqs (o ()))
@@ -298,14 +298,12 @@ module Parser =
             | 0, x -> 0, x - 1
             | x, y -> x - 1, y - 1
         match lt with
-        | Empty when snd range = 0 -> [""]
+        | Empty when fst range = 0 && snd range >= 0 -> ["<eos>"]
         | Or xs when snd range >= 0 -> Seq.fold List.append [] (Seq.map (lazyTree2guardedSeqs range) xs)
-        | And(Nuc.A, o) when fst range = 0 && snd range > 0 -> List.map ((+) "A") (lazyTree2guardedSeqs next (o ()))
-        | And(Nuc.C, o) when fst range = 0 && snd range > 0 -> List.map ((+) "C") (lazyTree2guardedSeqs next (o ()))
-        | And(Nuc.G, o) when fst range = 0 && snd range > 0 -> List.map ((+) "G") (lazyTree2guardedSeqs next (o ()))
-        | And(Nuc.U, o) when fst range = 0 && snd range > 0 -> List.map ((+) "U") (lazyTree2guardedSeqs next (o ()))
-        | And(_, o) when fst range <> 0 && snd range > 0 -> lazyTree2guardedSeqs next (o ())
-        | And(_, _) when snd range = 0 -> [""]
+        | And(Nuc.A, o) when snd range > 0 -> List.map ((+) "A") (lazyTree2guardedSeqs next (o ()))
+        | And(Nuc.C, o) when snd range > 0 -> List.map ((+) "C") (lazyTree2guardedSeqs next (o ()))
+        | And(Nuc.G, o) when snd range > 0 -> List.map ((+) "G") (lazyTree2guardedSeqs next (o ()))
+        | And(Nuc.U, o) when snd range > 0 -> List.map ((+) "U") (lazyTree2guardedSeqs next (o ()))
         | _ -> []
     
     let seqFilter: list<string> -> string[] = Set >> Set.toArray
