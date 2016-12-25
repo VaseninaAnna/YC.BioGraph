@@ -26,6 +26,7 @@ or write them in the input textbox as you can see here.
 <img src="img/text2.png" alt="textbox2"/>
 
 Remember that the range input should be correct.
+Also if you want to get all length sequences, input (-1, -1) range.
 
 <img src="img/range.png" alt="range"/>
 
@@ -41,7 +42,7 @@ Some more examples
 
  * Example 2 <img src="img/ex2.jpg" alt="example2"/>
 
- * Example 3 <img src="img/ex2.jpg" alt="example3"/>
+ * Example 3 <img src="img/ex3.jpg" alt="example3"/>
 
 
 *)
