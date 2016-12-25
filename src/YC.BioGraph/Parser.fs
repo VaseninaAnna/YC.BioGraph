@@ -264,11 +264,9 @@ module Parser =
                     let l, r = g.ands.[x]
                     iAndComb (fun () -> gen l) (fun () -> gen r) ()
                 elif Map.containsKey x g.ors then
-                    IOr << iDisOr << IOr <| (seq { for it in g.ors.[x] -> gen it })//<< disOr << Or <| List.map gen g.ors.[x]
+                    IOr << iDisOr << IOr <| (seq { for it in g.ors.[x] -> gen it })
                 else IOr Seq.empty
-        let f = gen (g.start)
-        let g () = f
-        g ()
+        gen (g.start)
     
     let iLazyTree2lazyTree (inputG: Map<int * int, Nuc>) (g: ILazyRegTree): LazyRegTree =
         let rec il2l (gr: ILazyRegTree) =
