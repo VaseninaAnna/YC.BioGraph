@@ -43,7 +43,10 @@ s: a | d s
 a: A
 d: U"
             | "brackets" -> @"[<Start>]
-s: A s U | C"
+s: d s | d
+d: f | e
+f: A s U
+e: C"
             |  _  -> ""
         | Graph ->
             match name with
