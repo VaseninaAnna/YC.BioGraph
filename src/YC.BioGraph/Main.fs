@@ -60,7 +60,7 @@ module Site =
 
     let GraphPage g i =
         Templating.Graph "Graph" [
-            Div [ClientSide <@ Client.Graph g i @>]
+            Div [Attr.Id "canvas"; Attr.Height "height"; Attr.Width "width"]
         ]
 
     let AboutPage =
