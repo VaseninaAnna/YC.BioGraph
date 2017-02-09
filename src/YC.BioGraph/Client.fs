@@ -111,23 +111,64 @@ module Client =
                 |> wsfe.WithTextLabel "Output"
                 |> wsfe.WithLabelAbove
                 |> setFormSize (getFormSize 85 500) "textarea"               
-            return output }
+            return output
+                }
+        
+            
         |> wsfe.WithFormContainer
         |> wsff.FlipBody
         
+   
+   
+   
+   
+    let Graph (height, width, g: array<int * int * string * int>, c: int) =
+      Div [
+         Div [Attr.Id "canvas"; Attr.Height height; Attr.Width width]
+         Input [Attr.Type "button"; Attr.Value "Draw!"]
+             |>! OnClick (fun _ _ -> JS.Window?draw height width g c)
+          ]
+
     let ShowImageControl grOption drawGr = 
-       let src = 
+     let src =
            match (grOption, drawGr) with
-           | (None, true) -> "defaultImg.svg"
-           | (None, false) -> "defaultImg.svg"
-           | (Some(graphOption), true) -> "graphImg.svg" //to do
-           | (Some(graphOption), false) -> "defaultImg.svg"
-       wsff.OfElement (fun () ->
+           | (None, true) -> wsff.OfElement (fun () ->
             let hw = "height: " + fst(getFormSize 355 355) + "; width: " + fst(getFormSize 355 355)
-            Img [Attr.Style hw; Attr.Src src] )
-       |> wsfe.WithTextLabel "Graph visualisation"
-       |> wsfe.WithLabelAbove 
-       |> wsfe.WithFormContainer          
+            Img [Attr.Style hw; Attr.Src "defaultImg.svg"])
+           | (None, false) -> wsff.OfElement (fun () ->
+            let hw = "height: " + fst(getFormSize 355 355) + "; width: " + fst(getFormSize 355 355)
+            Img [Attr.Style hw; Attr.Src "defaultImg.svg"])
+              | (Some(graphOption), true) -> //to do
+                 let arr: array<int*int*string*int> = Array.zeroCreate (Array.length graphOption.edges) 
+                 for indx = 0 to Array.length graphOption.edges-1 do
+                       let f1 nuc =
+                          match nuc with
+                             |A -> "A"
+                             |U -> "U"
+                             |C -> "C"
+                             |G -> "G"  
+                       let f2 bool =
+                          match bool with
+                           |true -> 1
+                           |false -> 0
+                       arr.[indx] <-
+                           match graphOption.edges.[indx] with
+                             | a, b, c, d -> a,b,f1 c,f2 d
+                 wsff.OfElement(fun () ->Graph ((fst(getFormSize 355 355)),(fst(getFormSize 355 355)),arr, graphOption.countOfVertex))
+
+
+           | (Some(graphOption), false) -> wsff.OfElement (fun () ->
+                let hw = "height: " + fst(getFormSize 355 355) + "; width: " + fst(getFormSize 355 355)
+                Img [Attr.Style hw; Attr.Src "defaultImg.svg"])
+     src
+           |> wsfe.WithTextLabel "Graph visualisation"
+           |> wsfe.WithLabelAbove 
+           |> wsfe.WithFormContainer
+   
+
+          
+
+   
 
     let frm =   
         let InputForm  =
@@ -152,7 +193,10 @@ module Client =
                                                                   match grOption with
                                                                   | None -> (None, System.String.Join("\n",seqs))
                                                                   | Some(graphOption) -> (Some(graphOption), System.String.Join("\n",seqs))
-
+                                                                           
+                                                                            
+                                                                                 
+                                                          
                 let! picture = ShowImageControl grOption drawGr
                 let! output = OutputControl seqs              
                 return (output) }
@@ -170,9 +214,4 @@ module Client =
         
         Div [      
            MainForm
-        ] 
-
-                                                     
-    let Graph (g: array<int * int * string * int>) (c: int) =
-        JS.Window?fullscreen_draw g c
-        Div [ ] 
+        ]
