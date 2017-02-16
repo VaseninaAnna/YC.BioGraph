@@ -148,9 +148,8 @@ module Client =
                              |C -> "C"
                              |G -> "G"  
                        let f2 bool =
-                          match bool with
-                           |true -> 1
-                           |false -> 0
+                             if bool then 1
+                                     else 0
                        arr.[indx] <-
                            match graphOption.edges.[indx] with
                              | a, b, c, d -> a,b,f1 c,f2 d
