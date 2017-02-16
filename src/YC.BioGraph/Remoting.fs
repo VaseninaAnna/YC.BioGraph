@@ -43,11 +43,10 @@ s: a | d s
 a: A
 d: U"
             | "brackets" -> @"[<Start>]
-s: a s d | s s | b | c
-a: A
-b: C
-c: G
-d: U"
+s: d s | d
+d: f | e
+f: A s U
+e: C"
             |  _  -> ""
         | Graph ->
             match name with
@@ -61,26 +60,15 @@ d: U"
     1 -> 2 [label = A]
 }"
             | "brackets" -> @"digraph {
+    0 -> 0 [label = U]
+    1 -> 1 [label = U]
+    2 -> 2 [label = U]
     0 -> 1 [label = A]
+    1 -> 2 [label = A]
+    2 -> 0 [label = A]
     0 -> 2 [label = C]
-    0 -> 3 [label = G]
-    0 -> 4 [label = U]
-    1 -> 0 [label = A]
-    1 -> 2 [label = C]
-    1 -> 3 [label = G]
-    1 -> 4 [label = U]
-    2 -> 1 [label = A]
-    2 -> 0 [label = C]
-    2 -> 3 [label = G]
-    2 -> 4 [label = U]
-    3 -> 1 [label = A]
-    3 -> 2 [label = C]
-    3 -> 0 [label = G]
-    3 -> 4 [label = U]
-    4 -> 1 [label = A]
-    4 -> 2 [label = C]
-    4 -> 3 [label = G]
-    4 -> 0 [label = U]
+    1 -> 0 [label = C]
+    2 -> 1 [label = C]
 }"
             |  _  -> ""
 
